@@ -15,9 +15,6 @@ import java.util.HashSet;
 
 public class Sgud extends Application
 {
-	// TODO
-	public static String BASE_PATH = "/home/baz/Workspaces/sgud-config/";
-
 	public Sgud()
 	{
 		setName("SQUD");
@@ -70,9 +67,12 @@ public class Sgud extends Application
 		attachToRouter(router, "/category", CategoryServerResource.class);
 		attachToRouter(router, "/category/{categoryId}", CategoryServerResource.class);
 		attachToRouter(router, "/category/{categoryId}/item", CategoryItemServerResource.class);
+		attachToRouter(router, "/category/{categoryId}/rating", CategoryRatingServerResource.class);
 		attachToRouter(router, "/item", ItemServerResource.class);
 		attachToRouter(router, "/item/{itemId}", ItemServerResource.class);
 		attachToRouter(router, "/item/{itemId}/image", ItemImageServerResource.class);
+		attachToRouter(router, "/image", ImageServerResource.class);
+		attachToRouter(router, "/image/{imageId}", ImageServerResource.class);
 		attachToRouter(router, "/image/{imageId}/src", ImageSrcServerResource.class);
 		attachToRouter(router, "/item/{itemId}/rating", ItemRatingServerResource.class);
 		attachToRouter(router, "/item/{itemId}/rating/{categoryId}", ItemRatingIndividualServerResource.class);

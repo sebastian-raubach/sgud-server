@@ -15,7 +15,7 @@ public class ThumbnailUtils
 	public static boolean thumbnailExists(MediaType type, Integer imageId, File file, Size size)
 	{
 		String version = PropertyWatcher.get(ServerProperty.API_VERSION);
-		File folder = new File(System.getProperty("java.io.tmpdir"), "frickl-thumbnails" + "-" + version);
+		File folder = new File(System.getProperty("java.io.tmpdir"), "sgud-thumbnails" + "-" + version);
 		folder.mkdirs();
 
 		String extension = type == MediaType.IMAGE_PNG ? ".png" : ".jpg";
@@ -35,7 +35,7 @@ public class ThumbnailUtils
 	{
 		File result;
 		String version = PropertyWatcher.get(ServerProperty.API_VERSION);
-		File folder = new File(System.getProperty("java.io.tmpdir"), "frickl-thumbnails" + "-" + version);
+		File folder = new File(System.getProperty("java.io.tmpdir"), "sgud-thumbnails" + "-" + version);
 		folder.mkdirs();
 
 		String extension = type == MediaType.IMAGE_PNG ? ".png" : ".jpg";

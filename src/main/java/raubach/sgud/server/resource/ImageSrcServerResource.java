@@ -10,9 +10,10 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import raubach.sgud.server.Database;
-import raubach.sgud.server.Sgud;
 import raubach.sgud.server.database.tables.pojos.Images;
+import raubach.sgud.server.util.ServerProperty;
 import raubach.sgud.server.util.ThumbnailUtils;
+import raubach.sgud.server.util.watcher.PropertyWatcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class ImageSrcServerResource extends ServerResource
 
 				if (image != null)
 				{
-					File file = new File(Sgud.BASE_PATH, image.getPath());
+					File file = new File(PropertyWatcher.get(ServerProperty.IMAGE_FOLDER), image.getId() + ".jpg");
 					String filename = file.getName();
 					MediaType type;
 

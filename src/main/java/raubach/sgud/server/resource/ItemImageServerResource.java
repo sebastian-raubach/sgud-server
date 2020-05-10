@@ -1,10 +1,8 @@
 package raubach.sgud.server.resource;
 
-import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.SelectJoinStep;
-import org.jooq.SelectSelectStep;
+import org.jooq.*;
 import org.restlet.data.Status;
+import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
@@ -13,10 +11,15 @@ import raubach.sgud.resource.PaginatedResult;
 import raubach.sgud.server.Database;
 import raubach.sgud.server.database.tables.pojos.Images;
 import raubach.sgud.server.database.tables.pojos.ViewItems;
+import raubach.sgud.server.util.FileUploadUtils;
+import raubach.sgud.server.util.ServerProperty;
+import raubach.sgud.server.util.watcher.PropertyWatcher;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import static raubach.sgud.server.database.tables.Images.IMAGES;
 import static raubach.sgud.server.database.tables.ItemImages.ITEM_IMAGES;
@@ -37,6 +40,39 @@ public class ItemImageServerResource extends PaginatedServerResource
 		}
 		catch (Exception e)
 		{
+		}
+	}
+
+	@Post
+	public boolean postImage(Representation entity)
+	{
+		if (itemId == null || entity == null)
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			Result<Record1<Integer>> image = context.insertInto(IMAGES, IMAGES.PATH)
+					.values(UUID.randomUUID().toString())
+					.returningResult(IMAGES.ID)
+					.fetch();
+
+			int id = image.get(0).component1();
+
+			File targetFile = new File(PropertyWatcher.get(ServerProperty.IMAGE_FOLDER), id + ".jpg");
+
+			FileUploadUtils.handle(entity, "imageFile", targetFile);
+
+			context.insertInto(ITEM_IMAGES, ITEM_IMAGES.ITEM_ID, ITEM_IMAGES.IMAGE_ID)
+					.values(itemId, id)
+					.execute();
+
+			return true;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
 		}
 	}
 

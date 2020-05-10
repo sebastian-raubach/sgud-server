@@ -11,6 +11,7 @@ public enum ServerProperty
 	DATABASE_USERNAME("database.username", null, true),
 	DATABASE_PASSWORD("database.password", null, false),
 	DATABASE_PORT("database.port", null, false),
+	IMAGE_FOLDER("image.folder", null, true),
 	API_VERSION("api.version", "1", false);
 
 	String key;
