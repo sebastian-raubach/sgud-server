@@ -9,6 +9,7 @@ CREATE TABLE `categories`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `icon` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `created_on` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   `updated_on` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
@@ -17,23 +18,6 @@ CREATE TABLE `categories`  (
 
 -- ----------------------------
 -- Records of categories
--- ----------------------------
-
--- ----------------------------
--- Table structure for category_images
--- ----------------------------
-DROP TABLE IF EXISTS `category_images`;
-CREATE TABLE `category_images`  (
-  `category_id` int(11) NOT NULL,
-  `image_id` int(11) NOT NULL,
-  PRIMARY KEY (`category_id`, `image_id`) USING BTREE,
-  INDEX `categoryimages_ibfk_images`(`image_id`) USING BTREE,
-  CONSTRAINT `category_images_ibfk_categories` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `category_images_ibfk_images` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of category_images
 -- ----------------------------
 
 -- ----------------------------
@@ -120,23 +104,6 @@ CREATE TABLE `items`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for manufacturer_images
--- ----------------------------
-DROP TABLE IF EXISTS `manufacturer_images`;
-CREATE TABLE `manufacturer_images`  (
-  `manufacturer_id` int(11) NOT NULL,
-  `image_id` int(11) NOT NULL,
-  PRIMARY KEY (`manufacturer_id`, `image_id`) USING BTREE,
-  INDEX `manufacturerimages_ibfk_image`(`image_id`) USING BTREE,
-  CONSTRAINT `manufacturerimages_ibfk_image` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `manufacturerimages_ibfk_manufacturer` FOREIGN KEY (`manufacturer_id`) REFERENCES `manufacturers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of manufacturer_images
--- ----------------------------
-
--- ----------------------------
 -- Table structure for manufacturers
 -- ----------------------------
 DROP TABLE IF EXISTS `manufacturers`;
@@ -194,34 +161,20 @@ CREATE TABLE `sources`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for type_images
--- ----------------------------
-DROP TABLE IF EXISTS `type_images`;
-CREATE TABLE `type_images`  (
-  `type_id` int(11) NOT NULL,
-  `image_id` int(11) NOT NULL,
-  PRIMARY KEY (`type_id`, `image_id`) USING BTREE,
-  INDEX `typeimages_ibfk_images`(`image_id`) USING BTREE,
-  CONSTRAINT `type_images_ibfk_images` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `type_images_ibfk_types` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of type_images
--- ----------------------------
-
--- ----------------------------
 -- Table structure for types
 -- ----------------------------
 DROP TABLE IF EXISTS `types`;
 CREATE TABLE `types`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category_id` int(11) NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `icon` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `created_on` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   `updated_on` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `name`(`name`) USING BTREE
+  INDEX `name`(`name`) USING BTREE,
+  CONSTRAINT `type_ibfk_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------

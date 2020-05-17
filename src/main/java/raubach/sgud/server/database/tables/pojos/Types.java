@@ -4,10 +4,9 @@
 package raubach.sgud.server.database.tables.pojos;
 
 
+import javax.annotation.Generated;
 import java.io.Serializable;
 import java.sql.Timestamp;
-
-import javax.annotation.Generated;
 
 
 /**
@@ -23,11 +22,13 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Types implements Serializable {
 
-    private static final long serialVersionUID = 96910563;
+    private static final long serialVersionUID = -110938063;
 
     private Integer   id;
+    private Integer   categoryId;
     private String    name;
     private String    description;
+    private String    icon;
     private Timestamp createdOn;
     private Timestamp updatedOn;
 
@@ -35,22 +36,28 @@ public class Types implements Serializable {
 
     public Types(Types value) {
         this.id = value.id;
+        this.categoryId = value.categoryId;
         this.name = value.name;
         this.description = value.description;
+        this.icon = value.icon;
         this.createdOn = value.createdOn;
         this.updatedOn = value.updatedOn;
     }
 
     public Types(
         Integer   id,
+        Integer   categoryId,
         String    name,
         String    description,
+        String    icon,
         Timestamp createdOn,
         Timestamp updatedOn
     ) {
         this.id = id;
+        this.categoryId = categoryId;
         this.name = name;
         this.description = description;
+        this.icon = icon;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
     }
@@ -61,6 +68,14 @@ public class Types implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getCategoryId() {
+        return this.categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getName() {
@@ -77,6 +92,14 @@ public class Types implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getIcon() {
+        return this.icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public Timestamp getCreatedOn() {
@@ -100,8 +123,10 @@ public class Types implements Serializable {
         StringBuilder sb = new StringBuilder("Types (");
 
         sb.append(id);
+        sb.append(", ").append(categoryId);
         sb.append(", ").append(name);
         sb.append(", ").append(description);
+        sb.append(", ").append(icon);
         sb.append(", ").append(createdOn);
         sb.append(", ").append(updatedOn);
 

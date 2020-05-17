@@ -1,64 +1,52 @@
 package raubach.sgud.server.resource;
 
-import org.jooq.*;
+import org.jooq.DSLContext;
 import org.restlet.data.Status;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
-import raubach.sgud.resource.PaginatedRequest;
-import raubach.sgud.resource.PaginatedResult;
+import org.restlet.resource.ServerResource;
 import raubach.sgud.server.Database;
-import raubach.sgud.server.database.tables.pojos.ViewItems;
+import raubach.sgud.server.database.tables.pojos.Items;
+import raubach.sgud.server.database.tables.records.CategoriesRecord;
+import raubach.sgud.server.database.tables.records.ItemsRecord;
+import raubach.sgud.server.database.tables.records.SourcesRecord;
+import raubach.sgud.server.database.tables.records.TypesRecord;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 
-import static raubach.sgud.server.database.tables.ViewItems.*;
+import static raubach.sgud.server.database.tables.Categories.CATEGORIES;
+import static raubach.sgud.server.database.tables.Items.ITEMS;
+import static raubach.sgud.server.database.tables.Sources.SOURCES;
+import static raubach.sgud.server.database.tables.Types.TYPES;
 
-public class ItemServerResource extends PaginatedServerResource
+public class ItemServerResource extends ServerResource
 {
-	private Integer itemId;
-
-	@Override
-	protected void doInit() throws ResourceException
-	{
-		super.doInit();
-
-		try
-		{
-			this.itemId = Integer.parseInt(getRequestAttributes().get("itemId").toString());
-		}
-		catch (Exception e)
-		{
-		}
-	}
-
 	@Post
-	public PaginatedResult<List<ViewItems>> postItems(PaginatedRequest request) {
-		processRequest(request);
+	public int postItems(Items item) {
+		if (item == null || item.getCategoryId() == null || item.getManufacturerId() == null || item.getTypeId() == null)
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
 		{
-			SelectSelectStep<Record> select = context.select();
+			CategoriesRecord category = context.selectFrom(CATEGORIES)
+					.where(CATEGORIES.ID.eq(item.getCategoryId()))
+					.fetchAny();
+			TypesRecord type = context.selectFrom(TYPES)
+					.where(TYPES.ID.eq(item.getTypeId()))
+					.fetchAny();
+			SourcesRecord source = context.selectFrom(SOURCES)
+					.where(SOURCES.ID.eq(item.getSourceId()))
+					.fetchAny();
 
-			if (previousCount == -1)
-				select.hint("SQL_CALC_FOUND_ROWS");
+			if (category == null || type == null)
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 
-			SelectJoinStep<Record> from = select.from(VIEW_ITEMS);
+			ItemsRecord record = context.newRecord(ITEMS, item);
+			record.store();
 
-			if (itemId != null)
-				from.where(VIEW_ITEMS.ITEM_ID.eq(itemId));
-
-			filter(from, filters);
-
-			List<ViewItems> result = setPaginationAndOrderBy(from)
-					.fetch()
-					.into(ViewItems.class);
-
-			long count = previousCount == -1 ? context.fetchOne("SELECT FOUND_ROWS()").into(Long.class) : previousCount;
-
-			return new PaginatedResult<>(result, count);
+			return record.getId();
 		}
 		catch (SQLException e)
 		{

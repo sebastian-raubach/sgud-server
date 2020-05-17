@@ -11,9 +11,10 @@ import raubach.sgud.server.database.tables.records.ManufacturersRecord;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
-import static raubach.sgud.server.database.tables.Manufacturers.*;
+import static raubach.sgud.server.database.tables.Manufacturers.MANUFACTURERS;
 
 public class ManufacturerServerResource extends ServerResource
 {
@@ -85,7 +86,25 @@ public class ManufacturerServerResource extends ServerResource
 		{
 			ManufacturersRecord newRecord = context.newRecord(MANUFACTURERS, manufacturer);
 			newRecord.setCreatedOn(new Timestamp(System.currentTimeMillis()));
-			return newRecord.store();
+			newRecord.store();
+
+			return newRecord.getId();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+		}
+	}
+
+	@Get
+	public List<Manufacturers> getJson() {
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			return context.selectFrom(MANUFACTURERS)
+					.orderBy(MANUFACTURERS.NAME)
+					.fetchInto(Manufacturers.class);
 		}
 		catch (SQLException e)
 		{

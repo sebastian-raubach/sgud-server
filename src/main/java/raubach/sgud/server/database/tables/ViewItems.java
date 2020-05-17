@@ -4,18 +4,13 @@
 package raubach.sgud.server.database.tables;
 
 
-import javax.annotation.Generated;
-
-import org.jooq.Field;
-import org.jooq.Name;
-import org.jooq.Schema;
-import org.jooq.Table;
-import org.jooq.TableField;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
-
 import raubach.sgud.server.database.Sgud;
 import raubach.sgud.server.database.tables.records.ViewItemsRecord;
+
+import javax.annotation.Generated;
 
 
 /**
@@ -31,7 +26,7 @@ import raubach.sgud.server.database.tables.records.ViewItemsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewItems extends TableImpl<ViewItemsRecord> {
 
-    private static final long serialVersionUID = -1924484930;
+    private static final long serialVersionUID = -522030244;
 
     /**
      * The reference instance of <code>sgud.view_items</code>
@@ -115,6 +110,11 @@ public class ViewItems extends TableImpl<ViewItemsRecord> {
      * The column <code>sgud.view_items.type_description</code>.
      */
     public final TableField<ViewItemsRecord, String> TYPE_DESCRIPTION = createField("type_description", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>sgud.view_items.type_icon</code>.
+     */
+    public final TableField<ViewItemsRecord, String> TYPE_ICON = createField("type_icon", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
 
     /**
      * The column <code>sgud.view_items.avg_item_rating</code>.

@@ -15,6 +15,7 @@ SELECT
        	types.id AS `type_id`,
        	types.name AS `type_name`,
        	types.description AS `type_description`,
+       	types.icon AS `type_icon`,
        	AVG(item_ratings.rating) as `avg_item_rating`
        FROM
        	items
@@ -31,7 +32,7 @@ SELECT
 
 DROP VIEW IF EXISTS `view_categories`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `view_categories` AS
-SELECT `categories`.*, (SELECT 1 FROM `items` WHERE `items`.`category_id` = `categories`.`id`) AS `count` FROM `categories`;
+SELECT `categories`.*, (SELECT COUNT(1) FROM `items` WHERE `items`.`category_id` = `categories`.`id`) AS `count` FROM `categories`;
 
 DROP VIEW IF EXISTS `view_ratings`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `view_ratings` AS
@@ -42,6 +43,7 @@ SELECT
     rating_categories.id AS `rating_category_id`,
     rating_categories.name AS `rating_category_name`,
     rating_categories.description AS `rating_category_description`,
+    categories.id AS `category_id`,
     categories.name AS `category_name`,
     categories.description AS `category_description`,
     item_ratings.rating AS `rating`

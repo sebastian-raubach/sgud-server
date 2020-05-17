@@ -53,7 +53,7 @@ public class TypeServerResource extends ServerResource
 	}
 
 	@Delete
-	public boolean deleteManufacturer()
+	public boolean deleteType()
 	{
 		if (typeId == null)
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
@@ -73,7 +73,7 @@ public class TypeServerResource extends ServerResource
 	}
 
 	@Post
-	public int postManufacturer(Types type)
+	public int postType(Types type)
 	{
 		if (type == null || StringUtils.isEmpty(type.getName()) || typeId != null)
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -85,7 +85,9 @@ public class TypeServerResource extends ServerResource
 		{
 			TypesRecord newRecord = context.newRecord(TYPES, type);
 			newRecord.setCreatedOn(new Timestamp(System.currentTimeMillis()));
-			return newRecord.store();
+			newRecord.store();
+
+			return newRecord.getId();
 		}
 		catch (SQLException e)
 		{

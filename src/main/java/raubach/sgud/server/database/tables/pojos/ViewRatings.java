@@ -4,9 +4,8 @@
 package raubach.sgud.server.database.tables.pojos;
 
 
-import java.io.Serializable;
-
 import javax.annotation.Generated;
+import java.io.Serializable;
 
 
 /**
@@ -22,7 +21,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewRatings implements Serializable {
 
-    private static final long serialVersionUID = 590383538;
+    private static final long serialVersionUID = 627153017;
 
     private Integer itemId;
     private String  itemName;
@@ -30,6 +29,7 @@ public class ViewRatings implements Serializable {
     private Integer ratingCategoryId;
     private String  ratingCategoryName;
     private String  ratingCategoryDescription;
+    private Integer categoryId;
     private String  categoryName;
     private String  categoryDescription;
     private Double  rating;
@@ -43,6 +43,7 @@ public class ViewRatings implements Serializable {
         this.ratingCategoryId = value.ratingCategoryId;
         this.ratingCategoryName = value.ratingCategoryName;
         this.ratingCategoryDescription = value.ratingCategoryDescription;
+        this.categoryId = value.categoryId;
         this.categoryName = value.categoryName;
         this.categoryDescription = value.categoryDescription;
         this.rating = value.rating;
@@ -55,6 +56,7 @@ public class ViewRatings implements Serializable {
         Integer ratingCategoryId,
         String  ratingCategoryName,
         String  ratingCategoryDescription,
+        Integer categoryId,
         String  categoryName,
         String  categoryDescription,
         Double  rating
@@ -65,6 +67,7 @@ public class ViewRatings implements Serializable {
         this.ratingCategoryId = ratingCategoryId;
         this.ratingCategoryName = ratingCategoryName;
         this.ratingCategoryDescription = ratingCategoryDescription;
+        this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.categoryDescription = categoryDescription;
         this.rating = rating;
@@ -118,6 +121,14 @@ public class ViewRatings implements Serializable {
         this.ratingCategoryDescription = ratingCategoryDescription;
     }
 
+    public Integer getCategoryId() {
+        return this.categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
     public String getCategoryName() {
         return this.categoryName;
     }
@@ -152,6 +163,7 @@ public class ViewRatings implements Serializable {
         sb.append(", ").append(ratingCategoryId);
         sb.append(", ").append(ratingCategoryName);
         sb.append(", ").append(ratingCategoryDescription);
+        sb.append(", ").append(categoryId);
         sb.append(", ").append(categoryName);
         sb.append(", ").append(categoryDescription);
         sb.append(", ").append(rating);

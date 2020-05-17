@@ -4,20 +4,14 @@
 package raubach.sgud.server.database.tables;
 
 
-import java.sql.Timestamp;
-
-import javax.annotation.Generated;
-
-import org.jooq.Field;
-import org.jooq.Name;
-import org.jooq.Schema;
-import org.jooq.Table;
-import org.jooq.TableField;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
-
 import raubach.sgud.server.database.Sgud;
 import raubach.sgud.server.database.tables.records.ViewCategoriesRecord;
+
+import javax.annotation.Generated;
+import java.sql.Timestamp;
 
 
 /**
@@ -33,7 +27,7 @@ import raubach.sgud.server.database.tables.records.ViewCategoriesRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewCategories extends TableImpl<ViewCategoriesRecord> {
 
-    private static final long serialVersionUID = -894012789;
+    private static final long serialVersionUID = 1779580174;
 
     /**
      * The reference instance of <code>sgud.view_categories</code>
@@ -81,7 +75,7 @@ public class ViewCategories extends TableImpl<ViewCategoriesRecord> {
     /**
      * The column <code>sgud.view_categories.count</code>.
      */
-    public final TableField<ViewCategoriesRecord, Integer> COUNT = createField("count", org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<ViewCategoriesRecord, Long> COUNT = createField("count", org.jooq.impl.SQLDataType.BIGINT, this, "");
 
     /**
      * Create a <code>sgud.view_categories</code> table reference

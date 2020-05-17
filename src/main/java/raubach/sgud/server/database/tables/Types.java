@@ -4,27 +4,18 @@
 package raubach.sgud.server.database.tables;
 
 
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.Generated;
-
-import org.jooq.Field;
-import org.jooq.Identity;
-import org.jooq.Index;
-import org.jooq.Name;
-import org.jooq.Schema;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.UniqueKey;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 import org.jooq.impl.TableImpl;
-
 import raubach.sgud.server.database.Indexes;
 import raubach.sgud.server.database.Sgud;
 import raubach.sgud.server.database.tables.records.TypesRecord;
+
+import javax.annotation.Generated;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -40,7 +31,7 @@ import raubach.sgud.server.database.tables.records.TypesRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Types extends TableImpl<TypesRecord> {
 
-    private static final long serialVersionUID = -444911735;
+    private static final long serialVersionUID = 1718165237;
 
     /**
      * The reference instance of <code>sgud.types</code>
@@ -61,6 +52,11 @@ public class Types extends TableImpl<TypesRecord> {
     public final TableField<TypesRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).identity(true), this, "");
 
     /**
+     * The column <code>sgud.types.category_id</code>.
+     */
+    public final TableField<TypesRecord, Integer> CATEGORY_ID = createField("category_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
      * The column <code>sgud.types.name</code>.
      */
     public final TableField<TypesRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
@@ -69,6 +65,11 @@ public class Types extends TableImpl<TypesRecord> {
      * The column <code>sgud.types.description</code>.
      */
     public final TableField<TypesRecord, String> DESCRIPTION = createField("description", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>sgud.types.icon</code>.
+     */
+    public final TableField<TypesRecord, String> ICON = createField("icon", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
 
     /**
      * The column <code>sgud.types.created_on</code>.
@@ -122,7 +123,7 @@ public class Types extends TableImpl<TypesRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.TYPES_NAME, Indexes.TYPES_PRIMARY);
+        return Arrays.<Index>asList(Indexes.TYPES_NAME, Indexes.TYPES_PRIMARY, Indexes.TYPES_TYPE_IBFK_CATEGORY);
     }
 
     /**

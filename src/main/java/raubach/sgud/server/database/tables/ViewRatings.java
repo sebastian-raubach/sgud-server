@@ -4,18 +4,13 @@
 package raubach.sgud.server.database.tables;
 
 
-import javax.annotation.Generated;
-
-import org.jooq.Field;
-import org.jooq.Name;
-import org.jooq.Schema;
-import org.jooq.Table;
-import org.jooq.TableField;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
-
 import raubach.sgud.server.database.Sgud;
 import raubach.sgud.server.database.tables.records.ViewRatingsRecord;
+
+import javax.annotation.Generated;
 
 
 /**
@@ -31,7 +26,7 @@ import raubach.sgud.server.database.tables.records.ViewRatingsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewRatings extends TableImpl<ViewRatingsRecord> {
 
-    private static final long serialVersionUID = 170159857;
+    private static final long serialVersionUID = 1781266859;
 
     /**
      * The reference instance of <code>sgud.view_ratings</code>
@@ -75,6 +70,11 @@ public class ViewRatings extends TableImpl<ViewRatingsRecord> {
      * The column <code>sgud.view_ratings.rating_category_description</code>.
      */
     public final TableField<ViewRatingsRecord, String> RATING_CATEGORY_DESCRIPTION = createField("rating_category_description", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>sgud.view_ratings.category_id</code>.
+     */
+    public final TableField<ViewRatingsRecord, Integer> CATEGORY_ID = createField("category_id", org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>sgud.view_ratings.category_name</code>.

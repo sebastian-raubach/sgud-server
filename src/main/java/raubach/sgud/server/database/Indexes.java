@@ -4,25 +4,12 @@
 package raubach.sgud.server.database;
 
 
-import javax.annotation.Generated;
-
 import org.jooq.Index;
 import org.jooq.OrderField;
 import org.jooq.impl.Internal;
+import raubach.sgud.server.database.tables.*;
 
-import raubach.sgud.server.database.tables.Categories;
-import raubach.sgud.server.database.tables.CategoryImages;
-import raubach.sgud.server.database.tables.Images;
-import raubach.sgud.server.database.tables.ItemImages;
-import raubach.sgud.server.database.tables.ItemRatings;
-import raubach.sgud.server.database.tables.Items;
-import raubach.sgud.server.database.tables.ManufacturerImages;
-import raubach.sgud.server.database.tables.Manufacturers;
-import raubach.sgud.server.database.tables.RatingCategories;
-import raubach.sgud.server.database.tables.SchemaVersion;
-import raubach.sgud.server.database.tables.Sources;
-import raubach.sgud.server.database.tables.TypeImages;
-import raubach.sgud.server.database.tables.Types;
+import javax.annotation.Generated;
 
 
 /**
@@ -70,6 +57,7 @@ public class Indexes {
     public static final Index TYPE_IMAGES_TYPEIMAGES_IBFK_IMAGES = Indexes0.TYPE_IMAGES_TYPEIMAGES_IBFK_IMAGES;
     public static final Index TYPES_NAME = Indexes0.TYPES_NAME;
     public static final Index TYPES_PRIMARY = Indexes0.TYPES_PRIMARY;
+    public static final Index TYPES_TYPE_IBFK_CATEGORY = Indexes0.TYPES_TYPE_IBFK_CATEGORY;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -104,5 +92,6 @@ public class Indexes {
         public static Index TYPE_IMAGES_TYPEIMAGES_IBFK_IMAGES = Internal.createIndex("typeimages_ibfk_images", TypeImages.TYPE_IMAGES, new OrderField[] { TypeImages.TYPE_IMAGES.IMAGE_ID }, false);
         public static Index TYPES_NAME = Internal.createIndex("name", Types.TYPES, new OrderField[] { Types.TYPES.NAME }, false);
         public static Index TYPES_PRIMARY = Internal.createIndex("PRIMARY", Types.TYPES, new OrderField[] { Types.TYPES.ID }, true);
+        public static Index TYPES_TYPE_IBFK_CATEGORY = Internal.createIndex("type_ibfk_category", Types.TYPES, new OrderField[] { Types.TYPES.CATEGORY_ID }, false);
     }
 }

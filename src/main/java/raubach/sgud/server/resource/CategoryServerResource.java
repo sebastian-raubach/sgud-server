@@ -1,7 +1,6 @@
 package raubach.sgud.server.resource;
 
 import org.jooq.DSLContext;
-import org.jooq.SelectJoinStep;
 import org.jooq.SelectWhereStep;
 import org.jooq.tools.StringUtils;
 import org.restlet.data.Status;
@@ -17,8 +16,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
-import static raubach.sgud.server.database.tables.Categories.*;
-import static raubach.sgud.server.database.tables.ViewCategories.*;
+import static raubach.sgud.server.database.tables.Categories.CATEGORIES;
+import static raubach.sgud.server.database.tables.ViewCategories.VIEW_CATEGORIES;
 
 public class CategoryServerResource extends ServerResource
 {
@@ -90,7 +89,9 @@ public class CategoryServerResource extends ServerResource
 		{
 			CategoriesRecord newRecord = context.newRecord(CATEGORIES, category);
 			newRecord.setCreatedOn(new Timestamp(System.currentTimeMillis()));
-			return newRecord.store();
+			newRecord.store();
+
+			return newRecord.getId();
 		}
 		catch (SQLException e)
 		{
@@ -110,7 +111,8 @@ public class CategoryServerResource extends ServerResource
 			if (categoryId != null)
 				step.where(VIEW_CATEGORIES.ID.eq(categoryId));
 
-			return step.fetchInto(ViewCategories.class);
+			return step.orderBy(VIEW_CATEGORIES.COUNT.desc(), VIEW_CATEGORIES.NAME)
+					   .fetchInto(ViewCategories.class);
 		}
 		catch (SQLException e)
 		{

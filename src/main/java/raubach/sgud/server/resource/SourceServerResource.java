@@ -85,7 +85,9 @@ public class SourceServerResource extends ServerResource
 		{
 			SourcesRecord newRecord = context.newRecord(SOURCES, source);
 			newRecord.setCreatedOn(new Timestamp(System.currentTimeMillis()));
-			return newRecord.store();
+			newRecord.store();
+
+			return newRecord.getId();
 		}
 		catch (SQLException e)
 		{

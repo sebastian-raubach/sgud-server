@@ -4,10 +4,9 @@
 package raubach.sgud.server.database.tables.pojos;
 
 
+import javax.annotation.Generated;
 import java.io.Serializable;
 import java.sql.Timestamp;
-
-import javax.annotation.Generated;
 
 
 /**
@@ -23,7 +22,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewCategories implements Serializable {
 
-    private static final long serialVersionUID = -197034675;
+    private static final long serialVersionUID = 358740901;
 
     private Integer   id;
     private String    name;
@@ -31,7 +30,7 @@ public class ViewCategories implements Serializable {
     private String    icon;
     private Timestamp createdOn;
     private Timestamp updatedOn;
-    private Integer   count;
+    private Long      count;
 
     public ViewCategories() {}
 
@@ -52,7 +51,7 @@ public class ViewCategories implements Serializable {
         String    icon,
         Timestamp createdOn,
         Timestamp updatedOn,
-        Integer   count
+        Long      count
     ) {
         this.id = id;
         this.name = name;
@@ -111,11 +110,11 @@ public class ViewCategories implements Serializable {
         this.updatedOn = updatedOn;
     }
 
-    public Integer getCount() {
+    public Long getCount() {
         return this.count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 

@@ -4,9 +4,8 @@
 package raubach.sgud.server.database.tables.pojos;
 
 
-import java.io.Serializable;
-
 import javax.annotation.Generated;
+import java.io.Serializable;
 
 
 /**
@@ -22,7 +21,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewItems implements Serializable {
 
-    private static final long serialVersionUID = 2090006915;
+    private static final long serialVersionUID = -885606106;
 
     private Integer itemId;
     private String  itemName;
@@ -38,6 +37,7 @@ public class ViewItems implements Serializable {
     private Integer typeId;
     private String  typeName;
     private String  typeDescription;
+    private String  typeIcon;
     private Double  avgItemRating;
 
     public ViewItems() {}
@@ -57,6 +57,7 @@ public class ViewItems implements Serializable {
         this.typeId = value.typeId;
         this.typeName = value.typeName;
         this.typeDescription = value.typeDescription;
+        this.typeIcon = value.typeIcon;
         this.avgItemRating = value.avgItemRating;
     }
 
@@ -75,6 +76,7 @@ public class ViewItems implements Serializable {
         Integer typeId,
         String  typeName,
         String  typeDescription,
+        String  typeIcon,
         Double  avgItemRating
     ) {
         this.itemId = itemId;
@@ -91,6 +93,7 @@ public class ViewItems implements Serializable {
         this.typeId = typeId;
         this.typeName = typeName;
         this.typeDescription = typeDescription;
+        this.typeIcon = typeIcon;
         this.avgItemRating = avgItemRating;
     }
 
@@ -206,6 +209,14 @@ public class ViewItems implements Serializable {
         this.typeDescription = typeDescription;
     }
 
+    public String getTypeIcon() {
+        return this.typeIcon;
+    }
+
+    public void setTypeIcon(String typeIcon) {
+        this.typeIcon = typeIcon;
+    }
+
     public Double getAvgItemRating() {
         return this.avgItemRating;
     }
@@ -232,6 +243,7 @@ public class ViewItems implements Serializable {
         sb.append(", ").append(typeId);
         sb.append(", ").append(typeName);
         sb.append(", ").append(typeDescription);
+        sb.append(", ").append(typeIcon);
         sb.append(", ").append(avgItemRating);
 
         sb.append(")");

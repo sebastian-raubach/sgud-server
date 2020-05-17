@@ -68,8 +68,10 @@ public class Sgud extends Application
 		attachToRouter(router, "/category/{categoryId}", CategoryServerResource.class);
 		attachToRouter(router, "/category/{categoryId}/item", CategoryItemServerResource.class);
 		attachToRouter(router, "/category/{categoryId}/rating", CategoryRatingServerResource.class);
+		attachToRouter(router, "/category/{categoryId}/heatmap", CategoryHeatmapServerResource.class);
+		attachToRouter(router, "/category/{categoryId}/type", CategoryItemTypeServerResource.class);
 		attachToRouter(router, "/item", ItemServerResource.class);
-		attachToRouter(router, "/item/{itemId}", ItemServerResource.class);
+		attachToRouter(router, "/item/{itemId}", ItemViewServerResource.class);
 		attachToRouter(router, "/item/{itemId}/image", ItemImageServerResource.class);
 		attachToRouter(router, "/image", ImageServerResource.class);
 		attachToRouter(router, "/image/{imageId}", ImageServerResource.class);

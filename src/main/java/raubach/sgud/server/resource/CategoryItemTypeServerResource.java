@@ -7,16 +7,16 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import raubach.sgud.server.Database;
-import raubach.sgud.server.database.tables.pojos.RatingCategories;
-import raubach.sgud.server.database.tables.records.RatingCategoriesRecord;
+import raubach.sgud.server.database.tables.pojos.Types;
+import raubach.sgud.server.database.tables.records.TypesRecord;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import static raubach.sgud.server.database.tables.RatingCategories.RATING_CATEGORIES;
+import static raubach.sgud.server.database.tables.Types.TYPES;
 
-public class CategoryRatingServerResource extends ServerResource
+public class CategoryItemTypeServerResource extends ServerResource
 {
 	private Integer categoryId;
 
@@ -35,14 +35,13 @@ public class CategoryRatingServerResource extends ServerResource
 	}
 
 	@Post
-	public int postJson(RatingCategories category)
+	public boolean postJson(Types category)
 	{
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
 		{
-			RatingCategoriesRecord record = context.newRecord(RATING_CATEGORIES, category);
-			record.store();
-			return record.getId();
+			TypesRecord record = context.newRecord(TYPES, category);
+			return record.store() > 0;
 		}
 		catch (SQLException e)
 		{
@@ -52,14 +51,15 @@ public class CategoryRatingServerResource extends ServerResource
 	}
 
 	@Get
-	public List<RatingCategories> getJson()
+	public List<Types> getJson()
 	{
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
 		{
-			return context.selectFrom(RATING_CATEGORIES)
-					.where(RATING_CATEGORIES.CATEGORY_ID.eq(categoryId))
-					.fetchInto(RatingCategories.class);
+			return context.selectFrom(TYPES)
+					.where(TYPES.CATEGORY_ID.eq(categoryId))
+					.orderBy(TYPES.NAME)
+					.fetchInto(Types.class);
 		}
 		catch (SQLException e)
 		{
