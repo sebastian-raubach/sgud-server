@@ -60,7 +60,7 @@ public class ItemImageServerResource extends PaginatedServerResource
 			int id = image.get(0).component1();
 
 			File targetFile = new File(new File(PropertyWatcher.get(ServerProperty.CONFIG_PATH), "images"), id + ".jpg");
-			targetFile.mkdirs();
+			targetFile.getParentFile().mkdirs();
 
 			FileUploadUtils.handle(entity, "imageFile", targetFile);
 
