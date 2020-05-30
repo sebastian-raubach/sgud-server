@@ -71,7 +71,7 @@ public class ImageSrcServerResource extends ServerResource
 
 				if (image != null)
 				{
-					File file = new File(PropertyWatcher.get(ServerProperty.IMAGE_FOLDER), image.getId() + ".jpg");
+					File file = new File(new File(PropertyWatcher.get(ServerProperty.CONFIG_PATH), "images"), image.getId() + ".jpg");
 					String filename = file.getName();
 					MediaType type;
 

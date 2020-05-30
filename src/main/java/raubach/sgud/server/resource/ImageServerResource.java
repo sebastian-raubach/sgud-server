@@ -66,14 +66,14 @@ public class ImageServerResource extends ServerResource
 			if (record == null)
 				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 
-			File imageFile = new File(PropertyWatcher.get(ServerProperty.IMAGE_FOLDER), record.getId() + ".jpg");
+			File imageFile = new File(new File(PropertyWatcher.get(ServerProperty.CONFIG_PATH), "images"), record.getId() + ".jpg");
 
 			if (imageFile.exists())
 				imageFile.delete();
 
 			for (ThumbnailUtils.Size size : ThumbnailUtils.Size.values())
 			{
-				imageFile = new File(PropertyWatcher.get(ServerProperty.IMAGE_FOLDER), record.getId() + size.getSuffix() + ".jpg");
+				imageFile = new File(new File(PropertyWatcher.get(ServerProperty.CONFIG_PATH), "images"), record.getId() + size.getSuffix() + ".jpg");
 
 				if (imageFile.exists())
 					imageFile.delete();
