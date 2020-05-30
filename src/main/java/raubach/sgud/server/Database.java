@@ -64,15 +64,30 @@ public class Database
 			e.printStackTrace();
 		}
 
-		// Get an initial connection to try if it works
-		try (Connection conn = getConnection())
+		int unsuccessfulConnectionCount = 0;
+
+		while (unsuccessfulConnectionCount < 10)
 		{
-			DSL.using(conn, SQLDialect.MYSQL).close();
-		}
-		catch (SQLException e)
-		{
-			Logger.getLogger("").log(Level.SEVERE, e.getMessage());
-			e.printStackTrace();
+			// Get an initial connection to try if it works
+			try (Connection conn = getConnection())
+			{
+				DSL.using(conn, SQLDialect.MYSQL).close();
+				break;
+			}
+			catch (SQLException e)
+			{
+				Logger.getLogger("").log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
+				unsuccessfulConnectionCount++;
+				try
+				{
+					Thread.sleep(5000);
+				}
+				catch (InterruptedException ex)
+				{
+					ex.printStackTrace();
+				}
+			}
 		}
 
 		if (initAndUpdate)
@@ -100,7 +115,7 @@ public class Database
 				// Set up the database initially
 				try
 				{
-					URL url = Database.class.getClassLoader().getResource("database.sql");
+					URL url = Database.class.getClassLoader().getResource("raubach/sgud/server/util/database/init/sgud.sql");
 
 					if (url != null)
 					{
@@ -146,7 +161,7 @@ public class Database
 			// Add/update all the views
 			try
 			{
-				URL url = Database.class.getClassLoader().getResource("views.sql");
+				URL url = Database.class.getClassLoader().getResource("raubach/sgud/server/util/database/init/view_procedures.sql");
 
 				if (url != null)
 				{
