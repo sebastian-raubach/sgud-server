@@ -4,12 +4,22 @@
 package raubach.sgud.server.database;
 
 
+import javax.annotation.Generated;
+
 import org.jooq.Index;
 import org.jooq.OrderField;
 import org.jooq.impl.Internal;
-import raubach.sgud.server.database.tables.*;
 
-import javax.annotation.Generated;
+import raubach.sgud.server.database.tables.Categories;
+import raubach.sgud.server.database.tables.Images;
+import raubach.sgud.server.database.tables.ItemImages;
+import raubach.sgud.server.database.tables.ItemRatings;
+import raubach.sgud.server.database.tables.Items;
+import raubach.sgud.server.database.tables.Manufacturers;
+import raubach.sgud.server.database.tables.RatingCategories;
+import raubach.sgud.server.database.tables.SchemaVersion;
+import raubach.sgud.server.database.tables.Sources;
+import raubach.sgud.server.database.tables.Types;
 
 
 /**
@@ -31,8 +41,6 @@ public class Indexes {
 
     public static final Index CATEGORIES_NAME = Indexes0.CATEGORIES_NAME;
     public static final Index CATEGORIES_PRIMARY = Indexes0.CATEGORIES_PRIMARY;
-    public static final Index CATEGORY_IMAGES_CATEGORYIMAGES_IBFK_IMAGES = Indexes0.CATEGORY_IMAGES_CATEGORYIMAGES_IBFK_IMAGES;
-    public static final Index CATEGORY_IMAGES_PRIMARY = Indexes0.CATEGORY_IMAGES_PRIMARY;
     public static final Index IMAGES_PRIMARY = Indexes0.IMAGES_PRIMARY;
     public static final Index ITEM_IMAGES_ITEMIMAGES_IBFK_IMAGES = Indexes0.ITEM_IMAGES_ITEMIMAGES_IBFK_IMAGES;
     public static final Index ITEM_IMAGES_PRIMARY = Indexes0.ITEM_IMAGES_PRIMARY;
@@ -44,8 +52,6 @@ public class Indexes {
     public static final Index ITEMS_ITEMS_IBFK_TYPE = Indexes0.ITEMS_ITEMS_IBFK_TYPE;
     public static final Index ITEMS_NAME = Indexes0.ITEMS_NAME;
     public static final Index ITEMS_PRIMARY = Indexes0.ITEMS_PRIMARY;
-    public static final Index MANUFACTURER_IMAGES_MANUFACTURERIMAGES_IBFK_IMAGE = Indexes0.MANUFACTURER_IMAGES_MANUFACTURERIMAGES_IBFK_IMAGE;
-    public static final Index MANUFACTURER_IMAGES_PRIMARY = Indexes0.MANUFACTURER_IMAGES_PRIMARY;
     public static final Index MANUFACTURERS_PRIMARY = Indexes0.MANUFACTURERS_PRIMARY;
     public static final Index RATING_CATEGORIES_PRIMARY = Indexes0.RATING_CATEGORIES_PRIMARY;
     public static final Index RATING_CATEGORIES_RATINGCATEGORIES_IBFK_CATEGORY = Indexes0.RATING_CATEGORIES_RATINGCATEGORIES_IBFK_CATEGORY;
@@ -53,8 +59,6 @@ public class Indexes {
     public static final Index SCHEMA_VERSION_SCHEMA_VERSION_S_IDX = Indexes0.SCHEMA_VERSION_SCHEMA_VERSION_S_IDX;
     public static final Index SOURCES_NAME = Indexes0.SOURCES_NAME;
     public static final Index SOURCES_PRIMARY = Indexes0.SOURCES_PRIMARY;
-    public static final Index TYPE_IMAGES_PRIMARY = Indexes0.TYPE_IMAGES_PRIMARY;
-    public static final Index TYPE_IMAGES_TYPEIMAGES_IBFK_IMAGES = Indexes0.TYPE_IMAGES_TYPEIMAGES_IBFK_IMAGES;
     public static final Index TYPES_NAME = Indexes0.TYPES_NAME;
     public static final Index TYPES_PRIMARY = Indexes0.TYPES_PRIMARY;
     public static final Index TYPES_TYPE_IBFK_CATEGORY = Indexes0.TYPES_TYPE_IBFK_CATEGORY;
@@ -66,8 +70,6 @@ public class Indexes {
     private static class Indexes0 {
         public static Index CATEGORIES_NAME = Internal.createIndex("name", Categories.CATEGORIES, new OrderField[] { Categories.CATEGORIES.NAME }, false);
         public static Index CATEGORIES_PRIMARY = Internal.createIndex("PRIMARY", Categories.CATEGORIES, new OrderField[] { Categories.CATEGORIES.ID }, true);
-        public static Index CATEGORY_IMAGES_CATEGORYIMAGES_IBFK_IMAGES = Internal.createIndex("categoryimages_ibfk_images", CategoryImages.CATEGORY_IMAGES, new OrderField[] { CategoryImages.CATEGORY_IMAGES.IMAGE_ID }, false);
-        public static Index CATEGORY_IMAGES_PRIMARY = Internal.createIndex("PRIMARY", CategoryImages.CATEGORY_IMAGES, new OrderField[] { CategoryImages.CATEGORY_IMAGES.CATEGORY_ID, CategoryImages.CATEGORY_IMAGES.IMAGE_ID }, true);
         public static Index IMAGES_PRIMARY = Internal.createIndex("PRIMARY", Images.IMAGES, new OrderField[] { Images.IMAGES.ID }, true);
         public static Index ITEM_IMAGES_ITEMIMAGES_IBFK_IMAGES = Internal.createIndex("itemimages_ibfk_images", ItemImages.ITEM_IMAGES, new OrderField[] { ItemImages.ITEM_IMAGES.IMAGE_ID }, false);
         public static Index ITEM_IMAGES_PRIMARY = Internal.createIndex("PRIMARY", ItemImages.ITEM_IMAGES, new OrderField[] { ItemImages.ITEM_IMAGES.ITEM_ID, ItemImages.ITEM_IMAGES.IMAGE_ID }, true);
@@ -79,8 +81,6 @@ public class Indexes {
         public static Index ITEMS_ITEMS_IBFK_TYPE = Internal.createIndex("items_ibfk_type", Items.ITEMS, new OrderField[] { Items.ITEMS.TYPE_ID }, false);
         public static Index ITEMS_NAME = Internal.createIndex("name", Items.ITEMS, new OrderField[] { Items.ITEMS.NAME }, false);
         public static Index ITEMS_PRIMARY = Internal.createIndex("PRIMARY", Items.ITEMS, new OrderField[] { Items.ITEMS.ID }, true);
-        public static Index MANUFACTURER_IMAGES_MANUFACTURERIMAGES_IBFK_IMAGE = Internal.createIndex("manufacturerimages_ibfk_image", ManufacturerImages.MANUFACTURER_IMAGES, new OrderField[] { ManufacturerImages.MANUFACTURER_IMAGES.IMAGE_ID }, false);
-        public static Index MANUFACTURER_IMAGES_PRIMARY = Internal.createIndex("PRIMARY", ManufacturerImages.MANUFACTURER_IMAGES, new OrderField[] { ManufacturerImages.MANUFACTURER_IMAGES.MANUFACTURER_ID, ManufacturerImages.MANUFACTURER_IMAGES.IMAGE_ID }, true);
         public static Index MANUFACTURERS_PRIMARY = Internal.createIndex("PRIMARY", Manufacturers.MANUFACTURERS, new OrderField[] { Manufacturers.MANUFACTURERS.ID }, true);
         public static Index RATING_CATEGORIES_PRIMARY = Internal.createIndex("PRIMARY", RatingCategories.RATING_CATEGORIES, new OrderField[] { RatingCategories.RATING_CATEGORIES.ID }, true);
         public static Index RATING_CATEGORIES_RATINGCATEGORIES_IBFK_CATEGORY = Internal.createIndex("ratingcategories_ibfk_category", RatingCategories.RATING_CATEGORIES, new OrderField[] { RatingCategories.RATING_CATEGORIES.CATEGORY_ID }, false);
@@ -88,8 +88,6 @@ public class Indexes {
         public static Index SCHEMA_VERSION_SCHEMA_VERSION_S_IDX = Internal.createIndex("schema_version_s_idx", SchemaVersion.SCHEMA_VERSION, new OrderField[] { SchemaVersion.SCHEMA_VERSION.SUCCESS }, false);
         public static Index SOURCES_NAME = Internal.createIndex("name", Sources.SOURCES, new OrderField[] { Sources.SOURCES.NAME }, false);
         public static Index SOURCES_PRIMARY = Internal.createIndex("PRIMARY", Sources.SOURCES, new OrderField[] { Sources.SOURCES.ID }, true);
-        public static Index TYPE_IMAGES_PRIMARY = Internal.createIndex("PRIMARY", TypeImages.TYPE_IMAGES, new OrderField[] { TypeImages.TYPE_IMAGES.TYPE_ID, TypeImages.TYPE_IMAGES.IMAGE_ID }, true);
-        public static Index TYPE_IMAGES_TYPEIMAGES_IBFK_IMAGES = Internal.createIndex("typeimages_ibfk_images", TypeImages.TYPE_IMAGES, new OrderField[] { TypeImages.TYPE_IMAGES.IMAGE_ID }, false);
         public static Index TYPES_NAME = Internal.createIndex("name", Types.TYPES, new OrderField[] { Types.TYPES.NAME }, false);
         public static Index TYPES_PRIMARY = Internal.createIndex("PRIMARY", Types.TYPES, new OrderField[] { Types.TYPES.ID }, true);
         public static Index TYPES_TYPE_IBFK_CATEGORY = Internal.createIndex("type_ibfk_category", Types.TYPES, new OrderField[] { Types.TYPES.CATEGORY_ID }, false);

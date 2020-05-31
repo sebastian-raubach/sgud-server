@@ -4,13 +4,18 @@
 package raubach.sgud.server.database.tables;
 
 
-import org.jooq.*;
+import javax.annotation.Generated;
+
+import org.jooq.Field;
+import org.jooq.Name;
+import org.jooq.Schema;
+import org.jooq.Table;
+import org.jooq.TableField;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
+
 import raubach.sgud.server.database.Sgud;
 import raubach.sgud.server.database.tables.records.ViewItemsRecord;
-
-import javax.annotation.Generated;
 
 
 /**
@@ -26,7 +31,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewItems extends TableImpl<ViewItemsRecord> {
 
-    private static final long serialVersionUID = -522030244;
+    private static final long serialVersionUID = 1885378862;
 
     /**
      * The reference instance of <code>sgud.view_items</code>
@@ -75,6 +80,26 @@ public class ViewItems extends TableImpl<ViewItemsRecord> {
      * The column <code>sgud.view_items.manufacturer_url</code>.
      */
     public final TableField<ViewItemsRecord, String> MANUFACTURER_URL = createField("manufacturer_url", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>sgud.view_items.source_id</code>.
+     */
+    public final TableField<ViewItemsRecord, Integer> SOURCE_ID = createField("source_id", org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+
+    /**
+     * The column <code>sgud.view_items.source_name</code>.
+     */
+    public final TableField<ViewItemsRecord, String> SOURCE_NAME = createField("source_name", org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+
+    /**
+     * The column <code>sgud.view_items.source_description</code>.
+     */
+    public final TableField<ViewItemsRecord, String> SOURCE_DESCRIPTION = createField("source_description", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>sgud.view_items.source_url</code>.
+     */
+    public final TableField<ViewItemsRecord, String> SOURCE_URL = createField("source_url", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>sgud.view_items.category_id</code>.

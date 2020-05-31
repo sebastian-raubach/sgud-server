@@ -4,18 +4,27 @@
 package raubach.sgud.server.database.tables;
 
 
-import org.jooq.*;
-import org.jooq.impl.DSL;
-import org.jooq.impl.Internal;
-import org.jooq.impl.TableImpl;
-import raubach.sgud.server.database.Indexes;
-import raubach.sgud.server.database.Sgud;
-import raubach.sgud.server.database.tables.records.TypesRecord;
-
-import javax.annotation.Generated;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.jooq.Field;
+import org.jooq.Identity;
+import org.jooq.Index;
+import org.jooq.Name;
+import org.jooq.Schema;
+import org.jooq.Table;
+import org.jooq.TableField;
+import org.jooq.UniqueKey;
+import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
+import org.jooq.impl.TableImpl;
+
+import raubach.sgud.server.database.Indexes;
+import raubach.sgud.server.database.Sgud;
+import raubach.sgud.server.database.tables.records.TypesRecord;
 
 
 /**

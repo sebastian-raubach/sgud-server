@@ -4,13 +4,14 @@
 package raubach.sgud.server.database.tables.records;
 
 
+import javax.annotation.Generated;
+
 import org.jooq.Field;
 import org.jooq.Record10;
 import org.jooq.Row10;
 import org.jooq.impl.TableRecordImpl;
-import raubach.sgud.server.database.tables.ViewRatings;
 
-import javax.annotation.Generated;
+import raubach.sgud.server.database.tables.ViewRatings;
 
 
 /**

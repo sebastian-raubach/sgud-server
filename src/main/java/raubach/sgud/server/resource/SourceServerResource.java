@@ -11,6 +11,7 @@ import raubach.sgud.server.database.tables.records.SourcesRecord;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 import static raubach.sgud.server.database.tables.Sources.SOURCES;
@@ -88,6 +89,22 @@ public class SourceServerResource extends ServerResource
 			newRecord.store();
 
 			return newRecord.getId();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+		}
+	}
+
+	@Get
+	public List<Sources> getJson() {
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			return context.selectFrom(SOURCES)
+					.orderBy(SOURCES.NAME)
+					.fetchInto(Sources.class);
 		}
 		catch (SQLException e)
 		{

@@ -2,6 +2,7 @@ package raubach.sgud.server.resource;
 
 import org.jooq.*;
 import org.restlet.data.Status;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import raubach.sgud.resource.PaginatedRequest;
@@ -13,6 +14,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import static raubach.sgud.server.database.tables.Items.ITEMS;
 import static raubach.sgud.server.database.tables.ViewItems.*;
 
 public class ItemViewServerResource extends PaginatedServerResource
@@ -30,6 +32,25 @@ public class ItemViewServerResource extends PaginatedServerResource
 		}
 		catch (Exception e)
 		{
+		}
+	}
+
+	@Delete
+	public boolean deleteItem() {
+		if (itemId == null)
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			return context.deleteFrom(ITEMS)
+					.where(ITEMS.ID.eq(itemId))
+					.execute() > 0;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
 		}
 	}
 

@@ -4,8 +4,9 @@
 package raubach.sgud.server.database.tables.pojos;
 
 
-import javax.annotation.Generated;
 import java.io.Serializable;
+
+import javax.annotation.Generated;
 
 
 /**
@@ -21,7 +22,7 @@ import java.io.Serializable;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewItems implements Serializable {
 
-    private static final long serialVersionUID = -885606106;
+    private static final long serialVersionUID = 1052829511;
 
     private Integer itemId;
     private String  itemName;
@@ -30,6 +31,10 @@ public class ViewItems implements Serializable {
     private String  manufacturerName;
     private String  manufacturerDescription;
     private String  manufacturerUrl;
+    private Integer sourceId;
+    private String  sourceName;
+    private String  sourceDescription;
+    private String  sourceUrl;
     private Integer categoryId;
     private String  categoryName;
     private String  categoryDescription;
@@ -50,6 +55,10 @@ public class ViewItems implements Serializable {
         this.manufacturerName = value.manufacturerName;
         this.manufacturerDescription = value.manufacturerDescription;
         this.manufacturerUrl = value.manufacturerUrl;
+        this.sourceId = value.sourceId;
+        this.sourceName = value.sourceName;
+        this.sourceDescription = value.sourceDescription;
+        this.sourceUrl = value.sourceUrl;
         this.categoryId = value.categoryId;
         this.categoryName = value.categoryName;
         this.categoryDescription = value.categoryDescription;
@@ -69,6 +78,10 @@ public class ViewItems implements Serializable {
         String  manufacturerName,
         String  manufacturerDescription,
         String  manufacturerUrl,
+        Integer sourceId,
+        String  sourceName,
+        String  sourceDescription,
+        String  sourceUrl,
         Integer categoryId,
         String  categoryName,
         String  categoryDescription,
@@ -86,6 +99,10 @@ public class ViewItems implements Serializable {
         this.manufacturerName = manufacturerName;
         this.manufacturerDescription = manufacturerDescription;
         this.manufacturerUrl = manufacturerUrl;
+        this.sourceId = sourceId;
+        this.sourceName = sourceName;
+        this.sourceDescription = sourceDescription;
+        this.sourceUrl = sourceUrl;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.categoryDescription = categoryDescription;
@@ -151,6 +168,38 @@ public class ViewItems implements Serializable {
 
     public void setManufacturerUrl(String manufacturerUrl) {
         this.manufacturerUrl = manufacturerUrl;
+    }
+
+    public Integer getSourceId() {
+        return this.sourceId;
+    }
+
+    public void setSourceId(Integer sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    public String getSourceName() {
+        return this.sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getSourceDescription() {
+        return this.sourceDescription;
+    }
+
+    public void setSourceDescription(String sourceDescription) {
+        this.sourceDescription = sourceDescription;
+    }
+
+    public String getSourceUrl() {
+        return this.sourceUrl;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
     }
 
     public Integer getCategoryId() {
@@ -236,6 +285,10 @@ public class ViewItems implements Serializable {
         sb.append(", ").append(manufacturerName);
         sb.append(", ").append(manufacturerDescription);
         sb.append(", ").append(manufacturerUrl);
+        sb.append(", ").append(sourceId);
+        sb.append(", ").append(sourceName);
+        sb.append(", ").append(sourceDescription);
+        sb.append(", ").append(sourceUrl);
         sb.append(", ").append(categoryId);
         sb.append(", ").append(categoryName);
         sb.append(", ").append(categoryDescription);

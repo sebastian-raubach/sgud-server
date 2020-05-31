@@ -8,6 +8,10 @@ SELECT
        	manufacturers.name AS `manufacturer_name`,
        	manufacturers.description AS `manufacturer_description`,
        	manufacturers.url AS `manufacturer_url`,
+       	sources.id AS `source_id`,
+        sources.name AS `source_name`,
+        sources.description AS `source_description`,
+        sources.url AS `source_url`,
        	categories.id AS `category_id`,
        	categories.name AS `category_name`,
        	categories.description AS `category_description`,
@@ -21,6 +25,8 @@ SELECT
        	items
        LEFT JOIN manufacturers ON
        	manufacturers.id = items.manufacturer_id
+       LEFT JOIN sources ON
+        sources.id = items.source_id
        LEFT JOIN categories ON
        	categories.id = items.category_id
        LEFT JOIN item_ratings ON
