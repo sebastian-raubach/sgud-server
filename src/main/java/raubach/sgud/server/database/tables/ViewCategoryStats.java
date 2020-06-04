@@ -31,7 +31,7 @@ import raubach.sgud.server.database.tables.records.ViewCategoryStatsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewCategoryStats extends TableImpl<ViewCategoryStatsRecord> {
 
-    private static final long serialVersionUID = -870695920;
+    private static final long serialVersionUID = 272668946;
 
     /**
      * The reference instance of <code>sgud.view_category_stats</code>
@@ -60,6 +60,11 @@ public class ViewCategoryStats extends TableImpl<ViewCategoryStatsRecord> {
      * The column <code>sgud.view_category_stats.count</code>.
      */
     public final TableField<ViewCategoryStatsRecord, Long> COUNT = createField("count", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+
+    /**
+     * The column <code>sgud.view_category_stats.max</code>.
+     */
+    public final TableField<ViewCategoryStatsRecord, Long> MAX = createField("max", org.jooq.impl.SQLDataType.BIGINT, this, "");
 
     /**
      * Create a <code>sgud.view_category_stats</code> table reference

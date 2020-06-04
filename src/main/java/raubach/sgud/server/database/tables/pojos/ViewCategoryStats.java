@@ -22,11 +22,12 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewCategoryStats implements Serializable {
 
-    private static final long serialVersionUID = 253012838;
+    private static final long serialVersionUID = 394215132;
 
     private Integer categoryId;
     private String  month;
     private Long    count;
+    private Long    max;
 
     public ViewCategoryStats() {}
 
@@ -34,16 +35,19 @@ public class ViewCategoryStats implements Serializable {
         this.categoryId = value.categoryId;
         this.month = value.month;
         this.count = value.count;
+        this.max = value.max;
     }
 
     public ViewCategoryStats(
         Integer categoryId,
         String  month,
-        Long    count
+        Long    count,
+        Long    max
     ) {
         this.categoryId = categoryId;
         this.month = month;
         this.count = count;
+        this.max = max;
     }
 
     public Integer getCategoryId() {
@@ -70,6 +74,14 @@ public class ViewCategoryStats implements Serializable {
         this.count = count;
     }
 
+    public Long getMax() {
+        return this.max;
+    }
+
+    public void setMax(Long max) {
+        this.max = max;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ViewCategoryStats (");
@@ -77,6 +89,7 @@ public class ViewCategoryStats implements Serializable {
         sb.append(categoryId);
         sb.append(", ").append(month);
         sb.append(", ").append(count);
+        sb.append(", ").append(max);
 
         sb.append(")");
         return sb.toString();

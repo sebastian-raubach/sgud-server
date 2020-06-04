@@ -65,6 +65,7 @@ SELECT
 
 DROP VIEW IF EXISTS `view_category_stats`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `view_category_stats` AS
-SELECT categories.id AS category_id, CONCAT(YEAR(items.created_on), "-", LPAD(MONTH(items.created_on), 2, "00")) AS `month`, COUNT(items.id) as count
+SELECT categories.id AS category_id, CONCAT(YEAR(items.created_on), "-", LPAD(MONTH(items.created_on), 2, "00")) AS `month`, COUNT(items.id) as count, (SELECT COUNT(items.id) as max
+FROM categories LEFT JOIN items ON items.category_id = categories.id GROUP BY categories.id, CONCAT(YEAR(items.created_on), "-", LPAD(MONTH(items.created_on), 2, "00")) ORDER BY COUNT(items.id) DESC LIMIT 1) AS max
 FROM categories LEFT JOIN items ON items.category_id = categories.id
 GROUP BY categories.id, CONCAT(YEAR(items.created_on), "-", LPAD(MONTH(items.created_on), 2, "00"));
