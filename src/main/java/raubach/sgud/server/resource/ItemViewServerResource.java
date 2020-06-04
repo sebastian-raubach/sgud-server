@@ -1,18 +1,23 @@
 package raubach.sgud.server.resource;
 
 import org.jooq.*;
+import org.jooq.tools.StringUtils;
 import org.restlet.data.Status;
 import org.restlet.resource.Delete;
+import org.restlet.resource.Patch;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import raubach.sgud.resource.PaginatedRequest;
 import raubach.sgud.resource.PaginatedResult;
 import raubach.sgud.server.Database;
+import raubach.sgud.server.database.tables.pojos.Items;
 import raubach.sgud.server.database.tables.pojos.ViewItems;
+import raubach.sgud.server.database.tables.records.ItemsRecord;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 import static raubach.sgud.server.database.tables.Items.ITEMS;
 import static raubach.sgud.server.database.tables.ViewItems.*;
@@ -46,6 +51,36 @@ public class ItemViewServerResource extends PaginatedServerResource
 			return context.deleteFrom(ITEMS)
 					.where(ITEMS.ID.eq(itemId))
 					.execute() > 0;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+		}
+	}
+
+	@Patch
+	public boolean patchItem(Items item) {
+		if (itemId == null || item == null || item.getId() == null || !Objects.equals(itemId, item.getId()) || StringUtils.isEmpty(item.getName()))
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			ItemsRecord record = context.selectFrom(ITEMS).where(ITEMS.ID.eq(itemId)).fetchAny();
+
+			if (record == null)
+				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+
+			record.setName(item.getName());
+			record.setDescription(item.getDescription());
+			if(item.getTypeId() != null)
+				record.setTypeId(item.getTypeId());
+			if (item.getSourceId() != null)
+				record.setSourceId(item.getSourceId());
+			if (item.getManufacturerId() != null)
+				record.setManufacturerId(item.getManufacturerId());
+			return record.store() > 0;
 		}
 		catch (SQLException e)
 		{

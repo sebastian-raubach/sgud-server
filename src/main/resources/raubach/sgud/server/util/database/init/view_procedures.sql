@@ -4,6 +4,7 @@ SELECT
        	items.id AS `item_id`,
        	items.name AS `item_name`,
        	items.description AS `item_description`,
+       	items.created_on AS `item_created_on`,
        	manufacturers.id AS `manufacturer_id`,
        	manufacturers.name AS `manufacturer_name`,
        	manufacturers.description AS `manufacturer_description`,
@@ -61,3 +62,9 @@ SELECT
      rating_categories.id = item_ratings.ratingcategory_id
     LEFT JOIN categories ON
      categories.id = rating_categories.category_id;
+
+DROP VIEW IF EXISTS `view_category_stats`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `view_category_stats` AS
+SELECT categories.id AS category_id, CONCAT(YEAR(items.created_on), "-", LPAD(MONTH(items.created_on), 2, "00")) AS `month`, COUNT(items.id) as count
+FROM categories LEFT JOIN items ON items.category_id = categories.id
+GROUP BY categories.id, CONCAT(YEAR(items.created_on), "-", LPAD(MONTH(items.created_on), 2, "00"));

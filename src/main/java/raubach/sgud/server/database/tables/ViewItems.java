@@ -4,6 +4,8 @@
 package raubach.sgud.server.database.tables;
 
 
+import java.sql.Timestamp;
+
 import javax.annotation.Generated;
 
 import org.jooq.Field;
@@ -31,7 +33,7 @@ import raubach.sgud.server.database.tables.records.ViewItemsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewItems extends TableImpl<ViewItemsRecord> {
 
-    private static final long serialVersionUID = 1885378862;
+    private static final long serialVersionUID = 680141522;
 
     /**
      * The reference instance of <code>sgud.view_items</code>
@@ -60,6 +62,11 @@ public class ViewItems extends TableImpl<ViewItemsRecord> {
      * The column <code>sgud.view_items.item_description</code>.
      */
     public final TableField<ViewItemsRecord, String> ITEM_DESCRIPTION = createField("item_description", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>sgud.view_items.item_created_on</code>.
+     */
+    public final TableField<ViewItemsRecord, Timestamp> ITEM_CREATED_ON = createField("item_created_on", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.field("CURRENT_TIMESTAMP", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
 
     /**
      * The column <code>sgud.view_items.manufacturer_id</code>.

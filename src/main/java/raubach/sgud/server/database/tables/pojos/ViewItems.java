@@ -5,6 +5,7 @@ package raubach.sgud.server.database.tables.pojos;
 
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.annotation.Generated;
 
@@ -22,28 +23,29 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewItems implements Serializable {
 
-    private static final long serialVersionUID = 1052829511;
+    private static final long serialVersionUID = -426870703;
 
-    private Integer itemId;
-    private String  itemName;
-    private String  itemDescription;
-    private Integer manufacturerId;
-    private String  manufacturerName;
-    private String  manufacturerDescription;
-    private String  manufacturerUrl;
-    private Integer sourceId;
-    private String  sourceName;
-    private String  sourceDescription;
-    private String  sourceUrl;
-    private Integer categoryId;
-    private String  categoryName;
-    private String  categoryDescription;
-    private String  categoryIcon;
-    private Integer typeId;
-    private String  typeName;
-    private String  typeDescription;
-    private String  typeIcon;
-    private Double  avgItemRating;
+    private Integer   itemId;
+    private String    itemName;
+    private String    itemDescription;
+    private Timestamp itemCreatedOn;
+    private Integer   manufacturerId;
+    private String    manufacturerName;
+    private String    manufacturerDescription;
+    private String    manufacturerUrl;
+    private Integer   sourceId;
+    private String    sourceName;
+    private String    sourceDescription;
+    private String    sourceUrl;
+    private Integer   categoryId;
+    private String    categoryName;
+    private String    categoryDescription;
+    private String    categoryIcon;
+    private Integer   typeId;
+    private String    typeName;
+    private String    typeDescription;
+    private String    typeIcon;
+    private Double    avgItemRating;
 
     public ViewItems() {}
 
@@ -51,6 +53,7 @@ public class ViewItems implements Serializable {
         this.itemId = value.itemId;
         this.itemName = value.itemName;
         this.itemDescription = value.itemDescription;
+        this.itemCreatedOn = value.itemCreatedOn;
         this.manufacturerId = value.manufacturerId;
         this.manufacturerName = value.manufacturerName;
         this.manufacturerDescription = value.manufacturerDescription;
@@ -71,30 +74,32 @@ public class ViewItems implements Serializable {
     }
 
     public ViewItems(
-        Integer itemId,
-        String  itemName,
-        String  itemDescription,
-        Integer manufacturerId,
-        String  manufacturerName,
-        String  manufacturerDescription,
-        String  manufacturerUrl,
-        Integer sourceId,
-        String  sourceName,
-        String  sourceDescription,
-        String  sourceUrl,
-        Integer categoryId,
-        String  categoryName,
-        String  categoryDescription,
-        String  categoryIcon,
-        Integer typeId,
-        String  typeName,
-        String  typeDescription,
-        String  typeIcon,
-        Double  avgItemRating
+        Integer   itemId,
+        String    itemName,
+        String    itemDescription,
+        Timestamp itemCreatedOn,
+        Integer   manufacturerId,
+        String    manufacturerName,
+        String    manufacturerDescription,
+        String    manufacturerUrl,
+        Integer   sourceId,
+        String    sourceName,
+        String    sourceDescription,
+        String    sourceUrl,
+        Integer   categoryId,
+        String    categoryName,
+        String    categoryDescription,
+        String    categoryIcon,
+        Integer   typeId,
+        String    typeName,
+        String    typeDescription,
+        String    typeIcon,
+        Double    avgItemRating
     ) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemDescription = itemDescription;
+        this.itemCreatedOn = itemCreatedOn;
         this.manufacturerId = manufacturerId;
         this.manufacturerName = manufacturerName;
         this.manufacturerDescription = manufacturerDescription;
@@ -136,6 +141,14 @@ public class ViewItems implements Serializable {
 
     public void setItemDescription(String itemDescription) {
         this.itemDescription = itemDescription;
+    }
+
+    public Timestamp getItemCreatedOn() {
+        return this.itemCreatedOn;
+    }
+
+    public void setItemCreatedOn(Timestamp itemCreatedOn) {
+        this.itemCreatedOn = itemCreatedOn;
     }
 
     public Integer getManufacturerId() {
@@ -281,6 +294,7 @@ public class ViewItems implements Serializable {
         sb.append(itemId);
         sb.append(", ").append(itemName);
         sb.append(", ").append(itemDescription);
+        sb.append(", ").append(itemCreatedOn);
         sb.append(", ").append(manufacturerId);
         sb.append(", ").append(manufacturerName);
         sb.append(", ").append(manufacturerDescription);
