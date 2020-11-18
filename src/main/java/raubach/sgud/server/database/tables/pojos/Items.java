@@ -4,6 +4,8 @@
 package raubach.sgud.server.database.tables.pojos;
 
 
+import com.google.gson.JsonArray;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -23,7 +25,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Items implements Serializable {
 
-    private static final long serialVersionUID = -904175763;
+    private static final long serialVersionUID = 1947964080;
 
     private Integer   id;
     private Integer   categoryId;
@@ -32,6 +34,7 @@ public class Items implements Serializable {
     private Integer   sourceId;
     private String    name;
     private String    description;
+    private JsonArray tags;
     private Timestamp createdOn;
     private Timestamp updatedOn;
 
@@ -45,6 +48,7 @@ public class Items implements Serializable {
         this.sourceId = value.sourceId;
         this.name = value.name;
         this.description = value.description;
+        this.tags = value.tags;
         this.createdOn = value.createdOn;
         this.updatedOn = value.updatedOn;
     }
@@ -57,6 +61,7 @@ public class Items implements Serializable {
         Integer   sourceId,
         String    name,
         String    description,
+        JsonArray tags,
         Timestamp createdOn,
         Timestamp updatedOn
     ) {
@@ -67,6 +72,7 @@ public class Items implements Serializable {
         this.sourceId = sourceId;
         this.name = name;
         this.description = description;
+        this.tags = tags;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
     }
@@ -127,6 +133,14 @@ public class Items implements Serializable {
         this.description = description;
     }
 
+    public JsonArray getTags() {
+        return this.tags;
+    }
+
+    public void setTags(JsonArray tags) {
+        this.tags = tags;
+    }
+
     public Timestamp getCreatedOn() {
         return this.createdOn;
     }
@@ -154,6 +168,7 @@ public class Items implements Serializable {
         sb.append(", ").append(sourceId);
         sb.append(", ").append(name);
         sb.append(", ").append(description);
+        sb.append(", ").append(tags);
         sb.append(", ").append(createdOn);
         sb.append(", ").append(updatedOn);
 

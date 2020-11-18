@@ -28,6 +28,12 @@
                     <name>BOOLEAN</name>
                     <types>.*tinyint.*</types>
                 </forcedType>
+                <forcedType>
+                    <binding>raubach.sgud.server.binding.JsonStringArrayBinding</binding>
+                    <expression>.*\..*(tags)</expression>
+                    <types>.*</types>
+                    <userType>com.google.gson.JsonArray</userType>
+                </forcedType>
             </forcedTypes>
         </database>
 

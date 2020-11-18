@@ -4,6 +4,8 @@
 package raubach.sgud.server.database.tables.pojos;
 
 
+import com.google.gson.JsonArray;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -23,11 +25,12 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewItems implements Serializable {
 
-    private static final long serialVersionUID = -426870703;
+    private static final long serialVersionUID = 1394876395;
 
     private Integer   itemId;
     private String    itemName;
     private String    itemDescription;
+    private JsonArray itemTags;
     private Timestamp itemCreatedOn;
     private Integer   manufacturerId;
     private String    manufacturerName;
@@ -53,6 +56,7 @@ public class ViewItems implements Serializable {
         this.itemId = value.itemId;
         this.itemName = value.itemName;
         this.itemDescription = value.itemDescription;
+        this.itemTags = value.itemTags;
         this.itemCreatedOn = value.itemCreatedOn;
         this.manufacturerId = value.manufacturerId;
         this.manufacturerName = value.manufacturerName;
@@ -77,6 +81,7 @@ public class ViewItems implements Serializable {
         Integer   itemId,
         String    itemName,
         String    itemDescription,
+        JsonArray itemTags,
         Timestamp itemCreatedOn,
         Integer   manufacturerId,
         String    manufacturerName,
@@ -99,6 +104,7 @@ public class ViewItems implements Serializable {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemDescription = itemDescription;
+        this.itemTags = itemTags;
         this.itemCreatedOn = itemCreatedOn;
         this.manufacturerId = manufacturerId;
         this.manufacturerName = manufacturerName;
@@ -141,6 +147,14 @@ public class ViewItems implements Serializable {
 
     public void setItemDescription(String itemDescription) {
         this.itemDescription = itemDescription;
+    }
+
+    public JsonArray getItemTags() {
+        return this.itemTags;
+    }
+
+    public void setItemTags(JsonArray itemTags) {
+        this.itemTags = itemTags;
     }
 
     public Timestamp getItemCreatedOn() {
@@ -294,6 +308,7 @@ public class ViewItems implements Serializable {
         sb.append(itemId);
         sb.append(", ").append(itemName);
         sb.append(", ").append(itemDescription);
+        sb.append(", ").append(itemTags);
         sb.append(", ").append(itemCreatedOn);
         sb.append(", ").append(manufacturerId);
         sb.append(", ").append(manufacturerName);

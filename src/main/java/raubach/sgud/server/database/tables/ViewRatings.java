@@ -4,6 +4,8 @@
 package raubach.sgud.server.database.tables;
 
 
+import com.google.gson.JsonArray;
+
 import javax.annotation.Generated;
 
 import org.jooq.Field;
@@ -14,6 +16,7 @@ import org.jooq.TableField;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
+import raubach.sgud.server.binding.JsonStringArrayBinding;
 import raubach.sgud.server.database.Sgud;
 import raubach.sgud.server.database.tables.records.ViewRatingsRecord;
 
@@ -31,7 +34,7 @@ import raubach.sgud.server.database.tables.records.ViewRatingsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewRatings extends TableImpl<ViewRatingsRecord> {
 
-    private static final long serialVersionUID = 1781266859;
+    private static final long serialVersionUID = -558673563;
 
     /**
      * The reference instance of <code>sgud.view_ratings</code>
@@ -60,6 +63,11 @@ public class ViewRatings extends TableImpl<ViewRatingsRecord> {
      * The column <code>sgud.view_ratings.item_description</code>.
      */
     public final TableField<ViewRatingsRecord, String> ITEM_DESCRIPTION = createField("item_description", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>sgud.view_ratings.item_tags</code>.
+     */
+    public final TableField<ViewRatingsRecord, JsonArray> ITEM_TAGS = createField("item_tags", org.jooq.impl.DefaultDataType.getDefaultDataType("\"sgud\".\"view_ratings_item_tags\""), this, "", new JsonStringArrayBinding());
 
     /**
      * The column <code>sgud.view_ratings.rating_category_id</code>.

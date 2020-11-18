@@ -1,7 +1,10 @@
 package raubach.sgud.server.resource;
 
+import com.google.gson.JsonArray;
 import org.jooq.*;
 import org.jooq.tools.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONString;
 import org.restlet.data.Status;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Patch;
@@ -16,8 +19,11 @@ import raubach.sgud.server.database.tables.records.ItemsRecord;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.logging.Logger;
 
 import static raubach.sgud.server.database.tables.Items.ITEMS;
 import static raubach.sgud.server.database.tables.ViewItems.*;
@@ -74,6 +80,21 @@ public class ItemViewServerResource extends PaginatedServerResource
 
 			record.setName(item.getName());
 			record.setDescription(item.getDescription());
+			if (item.getTags() != null) {
+				// Remove duplicates
+				JsonArray array = item.getTags();
+				JsonArray temp = new JsonArray();
+				Set<String> set = new HashSet<>();
+				array.forEach(t -> {
+					if (!set.contains(t.getAsString()))
+					{
+						temp.add(t);
+						set.add(t.getAsString());
+					}
+				});
+				Logger.getLogger("").info("Setting tags: " + temp);
+				record.setTags(temp);
+			}
 			if(item.getTypeId() != null)
 				record.setTypeId(item.getTypeId());
 			if (item.getSourceId() != null)

@@ -4,6 +4,8 @@
 package raubach.sgud.server.database.tables.pojos;
 
 
+import com.google.gson.JsonArray;
+
 import java.io.Serializable;
 
 import javax.annotation.Generated;
@@ -22,18 +24,19 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewRatings implements Serializable {
 
-    private static final long serialVersionUID = 627153017;
+    private static final long serialVersionUID = 1626336589;
 
-    private Integer itemId;
-    private String  itemName;
-    private String  itemDescription;
-    private Integer ratingCategoryId;
-    private String  ratingCategoryName;
-    private String  ratingCategoryDescription;
-    private Integer categoryId;
-    private String  categoryName;
-    private String  categoryDescription;
-    private Double  rating;
+    private Integer   itemId;
+    private String    itemName;
+    private String    itemDescription;
+    private JsonArray itemTags;
+    private Integer   ratingCategoryId;
+    private String    ratingCategoryName;
+    private String    ratingCategoryDescription;
+    private Integer   categoryId;
+    private String    categoryName;
+    private String    categoryDescription;
+    private Double    rating;
 
     public ViewRatings() {}
 
@@ -41,6 +44,7 @@ public class ViewRatings implements Serializable {
         this.itemId = value.itemId;
         this.itemName = value.itemName;
         this.itemDescription = value.itemDescription;
+        this.itemTags = value.itemTags;
         this.ratingCategoryId = value.ratingCategoryId;
         this.ratingCategoryName = value.ratingCategoryName;
         this.ratingCategoryDescription = value.ratingCategoryDescription;
@@ -51,20 +55,22 @@ public class ViewRatings implements Serializable {
     }
 
     public ViewRatings(
-        Integer itemId,
-        String  itemName,
-        String  itemDescription,
-        Integer ratingCategoryId,
-        String  ratingCategoryName,
-        String  ratingCategoryDescription,
-        Integer categoryId,
-        String  categoryName,
-        String  categoryDescription,
-        Double  rating
+        Integer   itemId,
+        String    itemName,
+        String    itemDescription,
+        JsonArray itemTags,
+        Integer   ratingCategoryId,
+        String    ratingCategoryName,
+        String    ratingCategoryDescription,
+        Integer   categoryId,
+        String    categoryName,
+        String    categoryDescription,
+        Double    rating
     ) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemDescription = itemDescription;
+        this.itemTags = itemTags;
         this.ratingCategoryId = ratingCategoryId;
         this.ratingCategoryName = ratingCategoryName;
         this.ratingCategoryDescription = ratingCategoryDescription;
@@ -96,6 +102,14 @@ public class ViewRatings implements Serializable {
 
     public void setItemDescription(String itemDescription) {
         this.itemDescription = itemDescription;
+    }
+
+    public JsonArray getItemTags() {
+        return this.itemTags;
+    }
+
+    public void setItemTags(JsonArray itemTags) {
+        this.itemTags = itemTags;
     }
 
     public Integer getRatingCategoryId() {
@@ -161,6 +175,7 @@ public class ViewRatings implements Serializable {
         sb.append(itemId);
         sb.append(", ").append(itemName);
         sb.append(", ").append(itemDescription);
+        sb.append(", ").append(itemTags);
         sb.append(", ").append(ratingCategoryId);
         sb.append(", ").append(ratingCategoryName);
         sb.append(", ").append(ratingCategoryDescription);

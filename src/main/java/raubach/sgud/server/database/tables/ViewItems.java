@@ -4,6 +4,8 @@
 package raubach.sgud.server.database.tables;
 
 
+import com.google.gson.JsonArray;
+
 import java.sql.Timestamp;
 
 import javax.annotation.Generated;
@@ -16,6 +18,7 @@ import org.jooq.TableField;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
+import raubach.sgud.server.binding.JsonStringArrayBinding;
 import raubach.sgud.server.database.Sgud;
 import raubach.sgud.server.database.tables.records.ViewItemsRecord;
 
@@ -33,7 +36,7 @@ import raubach.sgud.server.database.tables.records.ViewItemsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewItems extends TableImpl<ViewItemsRecord> {
 
-    private static final long serialVersionUID = 680141522;
+    private static final long serialVersionUID = -427729522;
 
     /**
      * The reference instance of <code>sgud.view_items</code>
@@ -62,6 +65,11 @@ public class ViewItems extends TableImpl<ViewItemsRecord> {
      * The column <code>sgud.view_items.item_description</code>.
      */
     public final TableField<ViewItemsRecord, String> ITEM_DESCRIPTION = createField("item_description", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>sgud.view_items.item_tags</code>.
+     */
+    public final TableField<ViewItemsRecord, JsonArray> ITEM_TAGS = createField("item_tags", org.jooq.impl.DefaultDataType.getDefaultDataType("\"sgud\".\"view_items_item_tags\""), this, "", new JsonStringArrayBinding());
 
     /**
      * The column <code>sgud.view_items.item_created_on</code>.
