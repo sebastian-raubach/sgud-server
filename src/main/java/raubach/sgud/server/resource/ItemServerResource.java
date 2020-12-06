@@ -36,9 +36,6 @@ public class ItemServerResource extends ServerResource
 			TypesRecord type = context.selectFrom(TYPES)
 					.where(TYPES.ID.eq(item.getTypeId()))
 					.fetchAny();
-			SourcesRecord source = context.selectFrom(SOURCES)
-					.where(SOURCES.ID.eq(item.getSourceId()))
-					.fetchAny();
 
 			if (category == null || type == null)
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

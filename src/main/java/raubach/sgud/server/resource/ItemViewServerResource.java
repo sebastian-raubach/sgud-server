@@ -94,6 +94,8 @@ public class ItemViewServerResource extends PaginatedServerResource
 				});
 				Logger.getLogger("").info("Setting tags: " + temp);
 				record.setTags(temp);
+			} else {
+				record.setTags(null);
 			}
 			if(item.getTypeId() != null)
 				record.setTypeId(item.getTypeId());
