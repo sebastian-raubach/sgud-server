@@ -22,7 +22,7 @@ SELECT
        	types.name AS `type_name`,
        	types.description AS `type_description`,
        	types.icon AS `type_icon`,
-       	AVG(item_ratings.rating) as `avg_item_rating`
+       	(SELECT AVG(ir.rating) FROM item_ratings ir LEFT JOIN rating_categories rc ON rc.id = ir.ratingcategory_id WHERE rc.include_in_average = 1 AND ir.item_id = items.id GROUP BY ir.item_id) AS `avg_item_rating`
        FROM
        	items
        LEFT JOIN manufacturers ON
@@ -52,6 +52,7 @@ SELECT
     rating_categories.id AS `rating_category_id`,
     rating_categories.name AS `rating_category_name`,
     rating_categories.description AS `rating_category_description`,
+    rating_categories.include_in_average AS `rating_category_counts`,
     categories.id AS `category_id`,
     categories.name AS `category_name`,
     categories.description AS `category_description`,

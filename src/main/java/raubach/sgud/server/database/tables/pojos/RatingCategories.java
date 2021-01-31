@@ -23,12 +23,13 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RatingCategories implements Serializable {
 
-    private static final long serialVersionUID = -391813142;
+    private static final long serialVersionUID = 1922772520;
 
     private Integer   id;
     private Integer   categoryId;
     private String    name;
     private String    description;
+    private Boolean   includeInAverage;
     private Timestamp createdOn;
     private Timestamp updatedOn;
 
@@ -39,6 +40,7 @@ public class RatingCategories implements Serializable {
         this.categoryId = value.categoryId;
         this.name = value.name;
         this.description = value.description;
+        this.includeInAverage = value.includeInAverage;
         this.createdOn = value.createdOn;
         this.updatedOn = value.updatedOn;
     }
@@ -48,6 +50,7 @@ public class RatingCategories implements Serializable {
         Integer   categoryId,
         String    name,
         String    description,
+        Boolean   includeInAverage,
         Timestamp createdOn,
         Timestamp updatedOn
     ) {
@@ -55,6 +58,7 @@ public class RatingCategories implements Serializable {
         this.categoryId = categoryId;
         this.name = name;
         this.description = description;
+        this.includeInAverage = includeInAverage;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
     }
@@ -91,6 +95,14 @@ public class RatingCategories implements Serializable {
         this.description = description;
     }
 
+    public Boolean getIncludeInAverage() {
+        return this.includeInAverage;
+    }
+
+    public void setIncludeInAverage(Boolean includeInAverage) {
+        this.includeInAverage = includeInAverage;
+    }
+
     public Timestamp getCreatedOn() {
         return this.createdOn;
     }
@@ -115,6 +127,7 @@ public class RatingCategories implements Serializable {
         sb.append(", ").append(categoryId);
         sb.append(", ").append(name);
         sb.append(", ").append(description);
+        sb.append(", ").append(includeInAverage);
         sb.append(", ").append(createdOn);
         sb.append(", ").append(updatedOn);
 

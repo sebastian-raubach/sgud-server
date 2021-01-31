@@ -4,8 +4,11 @@ import org.restlet.*;
 import org.restlet.data.Header;
 import org.restlet.data.Method;
 import org.restlet.engine.application.CorsFilter;
+import org.restlet.engine.application.Encoder;
 import org.restlet.resource.ServerResource;
+import org.restlet.routing.Filter;
 import org.restlet.routing.Router;
+import org.restlet.service.EncoderService;
 import org.restlet.util.Series;
 import raubach.sgud.server.resource.*;
 
@@ -28,15 +31,15 @@ public class Sgud extends Application
 	{
 		Context context = getContext();
 
-		// Set the encoder
-//		Filter encoder = new Encoder(context, false, true, new EncoderService(true));
-
 		// Create new router
 		Router router = new Router(context);
 
+		// Set the encoder
+		Filter encoder = new Encoder(context, false, true, new EncoderService(true));
+		encoder.setNext(router);
 
 		// Set the Cors filter
-		CorsFilter corsFilter = new CorsFilter(context, router)
+		CorsFilter corsFilter = new CorsFilter(context, encoder)
 		{
 			@Override
 			protected int beforeHandle(Request request, Response response)

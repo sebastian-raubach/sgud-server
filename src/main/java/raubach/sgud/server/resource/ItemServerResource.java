@@ -9,7 +9,6 @@ import raubach.sgud.server.Database;
 import raubach.sgud.server.database.tables.pojos.Items;
 import raubach.sgud.server.database.tables.records.CategoriesRecord;
 import raubach.sgud.server.database.tables.records.ItemsRecord;
-import raubach.sgud.server.database.tables.records.SourcesRecord;
 import raubach.sgud.server.database.tables.records.TypesRecord;
 
 import java.sql.Connection;
@@ -17,7 +16,6 @@ import java.sql.SQLException;
 
 import static raubach.sgud.server.database.tables.Categories.CATEGORIES;
 import static raubach.sgud.server.database.tables.Items.ITEMS;
-import static raubach.sgud.server.database.tables.Sources.SOURCES;
 import static raubach.sgud.server.database.tables.Types.TYPES;
 
 public class ItemServerResource extends ServerResource

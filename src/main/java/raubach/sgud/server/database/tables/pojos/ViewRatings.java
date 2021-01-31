@@ -24,7 +24,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewRatings implements Serializable {
 
-    private static final long serialVersionUID = 1626336589;
+    private static final long serialVersionUID = 1380127014;
 
     private Integer   itemId;
     private String    itemName;
@@ -33,6 +33,7 @@ public class ViewRatings implements Serializable {
     private Integer   ratingCategoryId;
     private String    ratingCategoryName;
     private String    ratingCategoryDescription;
+    private Boolean   ratingCategoryCounts;
     private Integer   categoryId;
     private String    categoryName;
     private String    categoryDescription;
@@ -48,6 +49,7 @@ public class ViewRatings implements Serializable {
         this.ratingCategoryId = value.ratingCategoryId;
         this.ratingCategoryName = value.ratingCategoryName;
         this.ratingCategoryDescription = value.ratingCategoryDescription;
+        this.ratingCategoryCounts = value.ratingCategoryCounts;
         this.categoryId = value.categoryId;
         this.categoryName = value.categoryName;
         this.categoryDescription = value.categoryDescription;
@@ -62,6 +64,7 @@ public class ViewRatings implements Serializable {
         Integer   ratingCategoryId,
         String    ratingCategoryName,
         String    ratingCategoryDescription,
+        Boolean   ratingCategoryCounts,
         Integer   categoryId,
         String    categoryName,
         String    categoryDescription,
@@ -74,6 +77,7 @@ public class ViewRatings implements Serializable {
         this.ratingCategoryId = ratingCategoryId;
         this.ratingCategoryName = ratingCategoryName;
         this.ratingCategoryDescription = ratingCategoryDescription;
+        this.ratingCategoryCounts = ratingCategoryCounts;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.categoryDescription = categoryDescription;
@@ -136,6 +140,14 @@ public class ViewRatings implements Serializable {
         this.ratingCategoryDescription = ratingCategoryDescription;
     }
 
+    public Boolean getRatingCategoryCounts() {
+        return this.ratingCategoryCounts;
+    }
+
+    public void setRatingCategoryCounts(Boolean ratingCategoryCounts) {
+        this.ratingCategoryCounts = ratingCategoryCounts;
+    }
+
     public Integer getCategoryId() {
         return this.categoryId;
     }
@@ -179,6 +191,7 @@ public class ViewRatings implements Serializable {
         sb.append(", ").append(ratingCategoryId);
         sb.append(", ").append(ratingCategoryName);
         sb.append(", ").append(ratingCategoryDescription);
+        sb.append(", ").append(ratingCategoryCounts);
         sb.append(", ").append(categoryId);
         sb.append(", ").append(categoryName);
         sb.append(", ").append(categoryDescription);

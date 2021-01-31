@@ -34,7 +34,7 @@ import raubach.sgud.server.database.tables.records.ViewRatingsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ViewRatings extends TableImpl<ViewRatingsRecord> {
 
-    private static final long serialVersionUID = -558673563;
+    private static final long serialVersionUID = 1871255001;
 
     /**
      * The reference instance of <code>sgud.view_ratings</code>
@@ -83,6 +83,11 @@ public class ViewRatings extends TableImpl<ViewRatingsRecord> {
      * The column <code>sgud.view_ratings.rating_category_description</code>.
      */
     public final TableField<ViewRatingsRecord, String> RATING_CATEGORY_DESCRIPTION = createField("rating_category_description", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>sgud.view_ratings.rating_category_counts</code>.
+     */
+    public final TableField<ViewRatingsRecord, Boolean> RATING_CATEGORY_COUNTS = createField("rating_category_counts", org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>sgud.view_ratings.category_id</code>.

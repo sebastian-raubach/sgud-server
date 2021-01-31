@@ -40,7 +40,7 @@ import raubach.sgud.server.database.tables.records.RatingCategoriesRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RatingCategories extends TableImpl<RatingCategoriesRecord> {
 
-    private static final long serialVersionUID = -1754214879;
+    private static final long serialVersionUID = 846134949;
 
     /**
      * The reference instance of <code>sgud.rating_categories</code>
@@ -74,6 +74,11 @@ public class RatingCategories extends TableImpl<RatingCategoriesRecord> {
      * The column <code>sgud.rating_categories.description</code>.
      */
     public final TableField<RatingCategoriesRecord, String> DESCRIPTION = createField("description", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>sgud.rating_categories.include_in_average</code>.
+     */
+    public final TableField<RatingCategoriesRecord, Boolean> INCLUDE_IN_AVERAGE = createField("include_in_average", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>sgud.rating_categories.created_on</code>.

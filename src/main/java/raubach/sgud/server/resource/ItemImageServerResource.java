@@ -52,12 +52,12 @@ public class ItemImageServerResource extends PaginatedServerResource
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
 		{
-			Result<Record1<Integer>> image = context.insertInto(IMAGES, IMAGES.PATH)
+			Record1<Integer> image = context.insertInto(IMAGES, IMAGES.PATH)
 					.values(UUID.randomUUID().toString())
 					.returningResult(IMAGES.ID)
-					.fetch();
+					.fetchOne();
 
-			int id = image.get(0).component1();
+			int id = image.component1();
 
 			File targetFile = new File(new File(PropertyWatcher.get(ServerProperty.CONFIG_PATH), "images"), id + ".jpg");
 			targetFile.getParentFile().mkdirs();
