@@ -1,70 +1,127 @@
 package raubach.sgud.server.resource;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.io.FileUtils;
-import org.jooq.DSLContext;
-import org.jooq.Record1;
-import org.jooq.Result;
-import org.restlet.data.MediaType;
-import org.restlet.data.Status;
-import org.restlet.ext.fileupload.RestletFileUpload;
-import org.restlet.representation.Representation;
-import org.restlet.resource.Delete;
-import org.restlet.resource.Post;
-import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
+import org.apache.commons.io.IOUtils;
+import org.jooq.*;
 import raubach.sgud.server.Database;
 import raubach.sgud.server.database.tables.pojos.Images;
 import raubach.sgud.server.database.tables.records.ImagesRecord;
-import raubach.sgud.server.util.ServerProperty;
-import raubach.sgud.server.util.ThumbnailUtils;
+import raubach.sgud.server.util.*;
 import raubach.sgud.server.util.watcher.PropertyWatcher;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.io.*;
+import java.sql.*;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import static raubach.sgud.server.database.tables.Images.IMAGES;
+import static raubach.sgud.server.database.tables.Images.*;
 
-public class ImageServerResource extends ServerResource
+@Path("image")
+public class ImageServerResource extends BaseResource
 {
-	private Integer imageId;
+	public static final String PARAM_SIZE = "size";
 
-	@Override
-	protected void doInit() throws ResourceException
+	@GET
+	@Path("/{imageId}/src")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces({"image/png", "image/jpeg", "image/svg+xml", "image/*"})
+	public Response getImage(@PathParam("imageId") Integer imageId, @QueryParam("size") ThumbnailUtils.Size size)
+		throws IOException, SQLException
 	{
-		super.doInit();
+		if (imageId != null)
+		{
+			try (Connection conn = Database.getConnection();
+				 DSLContext context = Database.getContext(conn))
+			{
+				SelectConditionStep<Record> step = context.select().from(IMAGES)
+														  .where(IMAGES.ID.eq(imageId));
 
-		try
-		{
-			this.imageId = Integer.parseInt(getRequestAttributes().get("imageId").toString());
+				Images image = step.fetchAnyInto(Images.class);
+
+				if (image != null)
+				{
+					File file = new File(new File(PropertyWatcher.get(ServerProperty.CONFIG_PATH), "images"), image.getId() + ".jpg");
+					String filename = file.getName();
+					String type;
+
+					if (file.getName().toLowerCase().endsWith(".jpg"))
+						type = "image/jpeg";
+					else if (file.getName().toLowerCase().endsWith(".png"))
+						type = "image/png";
+					else
+						type = "image/*";
+
+					if (size != ThumbnailUtils.Size.ORIGINAL)
+					{
+						try
+						{
+							file = ThumbnailUtils.getOrCreateThumbnail(type, image.getId(), file, size);
+						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+						}
+					}
+					// Check if the image exists
+					if (file.exists() && file.isFile())
+					{
+						byte[] bytes = IOUtils.toByteArray(file.toURI());
+
+						return Response.ok(new ByteArrayInputStream(bytes))
+									   .header("Content-Type", type)
+									   .header("content-disposition", "attachment;filename= \"" + file.getName() + "\"")
+									   .header("content-length", file.length())
+									   .build();
+					}
+					else
+					{
+						Logger.getLogger("").log(Level.WARNING, "File not found: " + file.getAbsolutePath());
+						resp.sendError(Response.Status.NOT_FOUND.getStatusCode());
+						return null;
+					}
+				}
+			}
+			catch (SQLException e)
+			{
+				resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+				return null;
+			}
 		}
-		catch (Exception e)
+		else
 		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return null;
 		}
+
+		return null;
 	}
 
-	@Delete
-	public boolean deleteJson(Images image) {
+	@DELETE
+	@Path("/{imageId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean deleteImage(@PathParam("imageId") Integer imageId, Images image)
+		throws IOException, SQLException
+	{
 		if (imageId == null || image == null || !Objects.equals(imageId, image.getId()))
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return false;
+		}
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
 		{
 			ImagesRecord record = context.selectFrom(IMAGES)
-					.where(IMAGES.ID.eq(imageId))
-					.fetchAny();
+										 .where(IMAGES.ID.eq(imageId))
+										 .fetchAny();
 
 			if (record == null)
-				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+			{
+				resp.sendError(Response.Status.NOT_FOUND.getStatusCode());
+				return false;
+			}
 
 			File imageFile = new File(new File(PropertyWatcher.get(ServerProperty.CONFIG_PATH), "images"), record.getId() + ".jpg");
 
@@ -84,7 +141,8 @@ public class ImageServerResource extends ServerResource
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return false;
 		}
 	}
 }

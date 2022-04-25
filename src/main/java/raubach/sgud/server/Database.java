@@ -50,8 +50,6 @@ public class Database
 		Database.username = username;
 		Database.password = password;
 
-		Logger.getLogger("").log(Level.INFO, "DB details: " + getDatabaseUrl());
-
 		try
 		{
 			// The newInstance() call is a work around for some

@@ -1,44 +1,34 @@
 package raubach.sgud.server.resource;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
 import org.jooq.DSLContext;
 import org.jooq.tools.StringUtils;
-import org.restlet.data.Status;
-import org.restlet.resource.*;
 import raubach.sgud.server.Database;
 import raubach.sgud.server.database.tables.pojos.Manufacturers;
 import raubach.sgud.server.database.tables.records.ManufacturersRecord;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
+import java.io.IOException;
+import java.sql.*;
+import java.util.*;
 
-import static raubach.sgud.server.database.tables.Manufacturers.MANUFACTURERS;
+import static raubach.sgud.server.database.tables.Manufacturers.*;
 
-public class ManufacturerServerResource extends ServerResource
+@Path("manufacturer")
+public class ManufacturerServerResource extends ContextResource
 {
-	private Integer manufacturerId;
-
-	@Override
-	protected void doInit() throws ResourceException
-	{
-		super.doInit();
-
-		try
-		{
-			this.manufacturerId = Integer.parseInt(getRequestAttributes().get("manufacturerId").toString());
-		}
-		catch (Exception e)
-		{
-		}
-	}
-
-	@Patch
-	public boolean patchManufacturer(Manufacturers manufacturer)
+	@PATCH
+	@Path("/{manufacturerId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean patchManufacturer(@PathParam("manufacturerId") Integer manufacturerId, Manufacturers manufacturer)
+		throws IOException, SQLException
 	{
 		if (manufacturer == null || manufacturerId == null || !Objects.equals(manufacturer.getId(), manufacturerId) || StringUtils.isEmpty(manufacturer.getName()))
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return false;
+		}
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
@@ -49,37 +39,55 @@ public class ManufacturerServerResource extends ServerResource
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return false;
 		}
 	}
 
-	@Delete
-	public boolean deleteManufacturer()
+	@DELETE
+	@Path("/{manufacturerId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean deleteManufacturer(@PathParam("manufacturerId") Integer manufacturerId)
+		throws IOException, SQLException
 	{
 		if (manufacturerId == null)
-			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return false;
+		}
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
 		{
 			return context.deleteFrom(MANUFACTURERS)
-					.where(MANUFACTURERS.ID.eq(manufacturerId))
-					.execute() > 0;
+						  .where(MANUFACTURERS.ID.eq(manufacturerId))
+						  .execute() > 0;
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return false;
 		}
 	}
 
-	@Post
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public int postManufacturer(Manufacturers manufacturer)
+		throws IOException, SQLException
 	{
-		if (manufacturer == null || StringUtils.isEmpty(manufacturer.getName()) || manufacturerId != null)
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		if (manufacturer == null || StringUtils.isEmpty(manufacturer.getName()))
+		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return -1;
+		}
 		if (manufacturer.getId() != null)
-			throw new ResourceException(Status.CLIENT_ERROR_CONFLICT);
+		{
+			resp.sendError(Response.Status.CONFLICT.getStatusCode());
+			return -1;
+		}
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
@@ -93,23 +101,29 @@ public class ManufacturerServerResource extends ServerResource
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return -1;
 		}
 	}
 
-	@Get
-	public List<Manufacturers> getJson() {
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Manufacturers> getManufacturers()
+		throws IOException, SQLException
+	{
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
 		{
 			return context.selectFrom(MANUFACTURERS)
-					.orderBy(MANUFACTURERS.NAME)
-					.fetchInto(Manufacturers.class);
+						  .orderBy(MANUFACTURERS.NAME)
+						  .fetchInto(Manufacturers.class);
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
 		}
 	}
 }

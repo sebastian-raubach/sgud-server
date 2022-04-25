@@ -1,44 +1,34 @@
 package raubach.sgud.server.resource;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
 import org.jooq.DSLContext;
 import org.jooq.tools.StringUtils;
-import org.restlet.data.Status;
-import org.restlet.resource.*;
 import raubach.sgud.server.Database;
 import raubach.sgud.server.database.tables.pojos.Sources;
 import raubach.sgud.server.database.tables.records.SourcesRecord;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
+import java.io.IOException;
+import java.sql.*;
+import java.util.*;
 
-import static raubach.sgud.server.database.tables.Sources.SOURCES;
+import static raubach.sgud.server.database.tables.Sources.*;
 
-public class SourceServerResource extends ServerResource
+@Path("source")
+public class SourceServerResource extends ContextResource
 {
-	private Integer sourceId;
-
-	@Override
-	protected void doInit() throws ResourceException
-	{
-		super.doInit();
-
-		try
-		{
-			this.sourceId = Integer.parseInt(getRequestAttributes().get("sourceId").toString());
-		}
-		catch (Exception e)
-		{
-		}
-	}
-
-	@Patch
-	public boolean patchSource(Sources source)
+	@PATCH
+	@Path("/{sourceId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean patchSource(@PathParam("sourceId") Integer sourceId, Sources source)
+		throws IOException, SQLException
 	{
 		if (source == null || sourceId == null || !Objects.equals(source.getId(), sourceId) || StringUtils.isEmpty(source.getName()))
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return false;
+		}
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
@@ -49,37 +39,55 @@ public class SourceServerResource extends ServerResource
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return false;
 		}
 	}
 
-	@Delete
-	public boolean deleteManufacturer()
+	@DELETE
+	@Path("/{sourceId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean deleteManufacturer(@PathParam("sourceId") Integer sourceId)
+		throws IOException, SQLException
 	{
 		if (sourceId == null)
-			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return false;
+		}
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
 		{
 			return context.deleteFrom(SOURCES)
-					.where(SOURCES.ID.eq(sourceId))
-					.execute() > 0;
+						  .where(SOURCES.ID.eq(sourceId))
+						  .execute() > 0;
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return false;
 		}
 	}
 
-	@Post
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public int postManufacturer(Sources source)
+		throws IOException, SQLException
 	{
-		if (source == null || StringUtils.isEmpty(source.getName()) || sourceId != null)
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		if (source == null || StringUtils.isEmpty(source.getName()))
+		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return -1;
+		}
 		if (source.getId() != null)
-			throw new ResourceException(Status.CLIENT_ERROR_CONFLICT);
+		{
+			resp.sendError(Response.Status.CONFLICT.getStatusCode());
+			return -1;
+		}
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
@@ -93,23 +101,29 @@ public class SourceServerResource extends ServerResource
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return -1;
 		}
 	}
 
-	@Get
-	public List<Sources> getJson() {
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Sources> getSources()
+		throws IOException, SQLException
+	{
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
 		{
 			return context.selectFrom(SOURCES)
-					.orderBy(SOURCES.NAME)
-					.fetchInto(Sources.class);
+						  .orderBy(SOURCES.NAME)
+						  .fetchInto(Sources.class);
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
 		}
 	}
 }

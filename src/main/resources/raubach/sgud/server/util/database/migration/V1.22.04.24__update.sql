@@ -1,0 +1,9 @@
+ALTER TABLE `categories` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `images` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `item_images` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `item_ratings` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `items` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `manufacturers` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `rating_categories` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `sources` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `types` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

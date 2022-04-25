@@ -1,47 +1,45 @@
 package raubach.sgud.server.resource;
 
-import org.jooq.DSLContext;
-import org.jooq.SelectWhereStep;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
+import org.jooq.*;
+import org.jooq.conf.ParamType;
 import org.jooq.tools.StringUtils;
-import org.restlet.data.Status;
-import org.restlet.resource.*;
+import raubach.sgud.resource.*;
 import raubach.sgud.server.Database;
-import raubach.sgud.server.database.tables.pojos.Categories;
-import raubach.sgud.server.database.tables.pojos.ViewCategories;
-import raubach.sgud.server.database.tables.records.CategoriesRecord;
+import raubach.sgud.server.database.tables.pojos.*;
+import raubach.sgud.server.database.tables.pojos.Types;
+import raubach.sgud.server.database.tables.records.*;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
+import java.io.IOException;
+import java.sql.*;
+import java.util.*;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import static raubach.sgud.server.database.tables.Categories.CATEGORIES;
-import static raubach.sgud.server.database.tables.ViewCategories.VIEW_CATEGORIES;
+import static raubach.sgud.server.database.tables.Categories.*;
+import static raubach.sgud.server.database.tables.RatingCategories.*;
+import static raubach.sgud.server.database.tables.Types.*;
+import static raubach.sgud.server.database.tables.ViewCategories.*;
+import static raubach.sgud.server.database.tables.ViewCategoryStats.*;
+import static raubach.sgud.server.database.tables.ViewItems.*;
+import static raubach.sgud.server.database.tables.ViewRatings.*;
 
-public class CategoryServerResource extends ServerResource
+@Path("category")
+public class CategoryServerResource extends BaseResource implements FilteredResource
 {
-	private Integer categoryId;
-
-	@Override
-	protected void doInit() throws ResourceException
-	{
-		super.doInit();
-
-		try
-		{
-			this.categoryId = Integer.parseInt(getRequestAttributes().get("categoryId").toString());
-		}
-		catch (Exception e)
-		{
-		}
-	}
-
-	@Patch
-	public boolean patchCategory(Categories category)
+	@PATCH
+	@Path("/{categoryId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean patchCategory(@PathParam("categoryId") Integer categoryId, Categories category)
+		throws IOException, SQLException
 	{
 		if (category == null || categoryId == null || !Objects.equals(category.getId(), categoryId) || StringUtils.isEmpty(category.getName()))
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return false;
+		}
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
@@ -52,37 +50,57 @@ public class CategoryServerResource extends ServerResource
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return false;
 		}
 	}
 
-	@Delete
-	public boolean deleteCategory()
+	@DELETE
+	@Path("/{categoryId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean deleteCategory(@PathParam("categoryId") Integer categoryId)
+		throws IOException, SQLException
 	{
 		if (categoryId == null)
-			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+
+		{
+			resp.sendError(Response.Status.NOT_FOUND.getStatusCode());
+			return false;
+		}
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
 		{
 			return context.deleteFrom(CATEGORIES)
-					.where(CATEGORIES.ID.eq(categoryId))
-					.execute() > 0;
+						  .where(CATEGORIES.ID.eq(categoryId))
+						  .execute() > 0;
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return false;
 		}
 	}
 
-	@Post
-	public int postCategory(Categories category)
+	@POST
+	@Path("/{categoryId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public int postCategory(@PathParam("categoryId") Integer categoryId, Categories category)
+		throws IOException, SQLException
 	{
 		if (category == null || StringUtils.isEmpty(category.getName()) || categoryId != null)
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return -1;
+		}
 		if (category.getId() != null)
-			throw new ResourceException(Status.CLIENT_ERROR_CONFLICT);
+		{
+			resp.sendError(Response.Status.CONFLICT.getStatusCode());
+			return -1;
+		}
 
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
@@ -96,12 +114,17 @@ public class CategoryServerResource extends ServerResource
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return -1;
 		}
 	}
 
-	@Get
-	public List<ViewCategories> getJson()
+	@GET
+	@Path("/{categoryId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ViewCategories> getCategoryById(@PathParam("categoryId") Integer categoryId)
+		throws IOException, SQLException
 	{
 		try (Connection conn = Database.getConnection();
 			 DSLContext context = Database.getContext(conn))
@@ -117,7 +140,225 @@ public class CategoryServerResource extends ServerResource
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
+		}
+	}
+
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ViewCategories> getCategories()
+		throws IOException, SQLException
+	{
+		return this.getCategoryById(null);
+	}
+
+	@POST
+	@Path("/{categoryId}/item")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public PaginatedResult<List<ViewItems>> postItems(@PathParam("categoryId") Integer categoryId, PaginatedRequest request)
+		throws IOException, SQLException
+	{
+		processRequest(request);
+
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			SelectSelectStep<Record> select = context.select();
+
+			if (previousCount == -1)
+				select.hint("SQL_CALC_FOUND_ROWS");
+
+			SelectConditionStep<Record> from = select.from(VIEW_ITEMS)
+													 .where(VIEW_ITEMS.CATEGORY_ID.eq(categoryId));
+
+			filter(from, filters);
+
+			Logger.getLogger("").info(select.getSQL(ParamType.INLINED));
+
+			List<ViewItems> result = setPaginationAndOrderBy(from)
+				.fetch()
+				.into(ViewItems.class);
+
+			long count = previousCount == -1 ? context.fetchOne("SELECT FOUND_ROWS()").into(Long.class) : previousCount;
+
+			return new PaginatedResult<>(result, count);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
+		}
+	}
+
+
+	@POST
+	@Path("/{categoryId}/rating")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public int postCategoryRating(@PathParam("categoryId") Integer categoryId, RatingCategories category)
+		throws IOException, SQLException
+	{
+		if (categoryId == null || category == null || categoryId != category.getCategoryId())
+		{
+			resp.sendError(Response.Status.BAD_REQUEST.getStatusCode());
+			return -1;
+		}
+
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			RatingCategoriesRecord record = context.newRecord(RATING_CATEGORIES, category);
+			record.store();
+			return record.getId();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return -1;
+		}
+	}
+
+	@GET
+	@Path("/{categoryId}/rating")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<RatingCategories> getCategoryRating(@PathParam("categoryId") Integer categoryId)
+		throws IOException, SQLException
+	{
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			return context.selectFrom(RATING_CATEGORIES)
+						  .where(RATING_CATEGORIES.CATEGORY_ID.eq(categoryId))
+						  .fetchInto(RatingCategories.class);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
+		}
+	}
+
+
+	@GET
+	@Path("/{categoryId}/heatmap")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<HeatmapData> getCategoryHeatmap(@PathParam("categoryId") Integer categoryId)
+		throws IOException, SQLException
+	{
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			Map<String, Items> items = new HashMap<>();
+			Map<String, Map<String, Double>> ratings = new HashMap<>();
+
+			context.selectFrom(VIEW_RATINGS)
+				   .where(VIEW_RATINGS.CATEGORY_ID.eq(categoryId))
+				   .forEach(r -> {
+					   String itemId = Integer.toString(r.getItemId());
+					   Items item = new Items();
+					   item.setId(r.getItemId());
+					   item.setName(r.getItemName());
+					   item.setDescription(r.getItemDescription());
+					   items.put(itemId, item);
+
+					   Map<String, Double> rating = ratings.get(itemId);
+
+					   if (rating == null)
+						   rating = new HashMap<>();
+
+					   rating.put(Integer.toString(r.getRatingCategoryId()), r.getRating());
+
+					   ratings.put(itemId, rating);
+				   });
+
+			return items.entrySet()
+						.stream()
+						.map(i -> {
+							HeatmapData data = new HeatmapData();
+							data.setItem(i.getValue());
+							data.setRatings(ratings.get(i.getKey()));
+							return data;
+						})
+						.collect(Collectors.toList());
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
+		}
+	}
+
+	@GET
+	@Path("/{categoryId}/stats")
+	public List<ViewCategoryStats> getCategoryStats(@PathParam("categoryId") Integer categoryId)
+		throws IOException, SQLException
+	{
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			return context.selectFrom(VIEW_CATEGORY_STATS)
+						  .where(VIEW_CATEGORY_STATS.CATEGORY_ID.eq(categoryId))
+						  .fetchInto(ViewCategoryStats.class);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
+		}
+	}
+
+
+	@POST
+	@Path("/{categoryId}/type")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean postCategoryType(Types category)
+		throws IOException, SQLException
+	{
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			TypesRecord record = context.newRecord(TYPES, category);
+			return record.store() > 0;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return false;
+		}
+	}
+
+	@GET
+	@Path("/{categoryId}/type")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Types> getCategoryTypes(@PathParam("categoryId") Integer categoryId)
+		throws IOException, SQLException
+	{
+		try (Connection conn = Database.getConnection();
+			 DSLContext context = Database.getContext(conn))
+		{
+			return context.selectFrom(TYPES)
+						  .where(TYPES.CATEGORY_ID.eq(categoryId))
+						  .orderBy(TYPES.NAME)
+						  .fetchInto(Types.class);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			resp.sendError(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
 		}
 	}
 }

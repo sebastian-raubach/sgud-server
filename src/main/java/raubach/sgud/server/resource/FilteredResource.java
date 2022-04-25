@@ -29,7 +29,7 @@ public interface FilteredResource
 	{
 		if (filters != null && filters.length > 0)
 		{
-			SelectConditionStep<T> where = step.and(filterIndividual(filters[0], jsonOperationAllowed));
+			Condition overall = filterIndividual(filters[0], jsonOperationAllowed);
 
 			for (int i = 1; i < filters.length; i++)
 			{
@@ -40,14 +40,16 @@ public interface FilteredResource
 					switch (filters[i - 1].getOperator())
 					{
 						case "and":
-							where.and(condition);
+							overall = overall.and(condition);
 							break;
 						case "or":
-							where.or(condition);
+							overall = overall.or(condition);
 							break;
 					}
 				}
 			}
+
+			step.and(overall);
 		}
 	}
 
@@ -55,7 +57,7 @@ public interface FilteredResource
 	{
 		if (filters != null && filters.length > 0)
 		{
-			SelectConditionStep<T> where = step.where(filterIndividual(filters[0], jsonOperationAllowed));
+			Condition overall = filterIndividual(filters[0], jsonOperationAllowed);
 
 			for (int i = 1; i < filters.length; i++)
 			{
@@ -66,14 +68,16 @@ public interface FilteredResource
 					switch (filters[i - 1].getOperator())
 					{
 						case "and":
-							where.and(condition);
+							overall = overall.and(condition);
 							break;
 						case "or":
-							where.or(condition);
+							overall = overall.or(condition);
 							break;
 					}
 				}
 			}
+
+			step.where(overall);
 		}
 	}
 
@@ -84,9 +88,9 @@ public interface FilteredResource
 
 		if (!CollectionUtils.isEmpty(filter.getValues()))
 			values = Arrays.stream(filter.getValues())
-									.filter(v -> !StringUtils.isEmpty(v))
-									.map(String::trim)
-									.collect(Collectors.toList());
+						   .filter(v -> !StringUtils.isEmpty(v))
+						   .map(String::strip)
+						   .collect(Collectors.toList());
 
 		if (CollectionUtils.isEmpty(values))
 			values.add("");
@@ -119,7 +123,7 @@ public interface FilteredResource
 				{
 					List<Condition> conditions = values.stream()
 													   .map(v -> v.replaceAll("[^a-zA-Z0-9_-]", "")) // Replace all non letters and numbers
-													   .map(v -> DSL.condition("JSON_CONTAINS(" + field.getName() + ", '\"" + v + "\"')"))
+													   .map(v -> DSL.condition("JSON_CONTAINS(" + field.getName() + ", '" + v + "')"))
 													   .collect(Collectors.toList());
 
 					Condition result = conditions.get(0);
@@ -148,7 +152,7 @@ public interface FilteredResource
 					// Otherwise, try and split the first one on commas and then use the individual entries
 					temp = Arrays.stream(first.split(","))
 								 .filter(v -> !StringUtils.isEmpty(v))
-								 .map(String::trim)
+								 .map(String::strip)
 								 .collect(Collectors.toList());
 				}
 

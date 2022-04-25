@@ -1,10 +1,10 @@
 package raubach.sgud.server;
 
+import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebListener;
 import raubach.sgud.server.util.watcher.PropertyWatcher;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
+@WebListener
 public class ApplicationListener implements ServletContextListener
 {
 	@Override
